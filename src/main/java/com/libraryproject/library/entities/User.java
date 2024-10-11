@@ -1,9 +1,17 @@
 package com.libraryproject.library.entities;
 
+import jakarta.persistence.*;
+
 import java.io.Serializable;
+import java.lang.annotation.Inherited;
 import java.util.Objects;
 
+@Entity
+@Table(name = "tb_user")
 public abstract class User implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String email;

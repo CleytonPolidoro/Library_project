@@ -1,5 +1,6 @@
 package com.libraryproject.library.entities;
 
+
 public class Client extends User{
     private Double fines= 0.0;
 
