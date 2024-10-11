@@ -17,17 +17,15 @@ public abstract class User implements Serializable {
     private String email;
     private String password;
     private String phone;
-    private String perfil;
 
     public User(){};
 
-    public User(Long id, String name, String email, String password, String phone, String perfil) {
+    public User(Long id, String name, String email, String password, String phone) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.phone = phone;
-        this.perfil = perfil;
     }
 
     public Long getId() {
@@ -68,14 +66,6 @@ public abstract class User implements Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public String getPerfil() {
-        return perfil;
-    }
-
-    public void setPerfil(String perfil) {
-        this.perfil = perfil;
     }
 
     @Override
