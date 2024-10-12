@@ -1,8 +1,7 @@
-package com.libraryproject.library;
+package com.libraryproject.library.resources;
 
-import com.libraryproject.library.entities.Client;
 import com.libraryproject.library.entities.User;
-import com.libraryproject.library.repositories.services.UserService;
+import com.libraryproject.library.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +18,7 @@ public class UserResource {
     @Autowired
     private UserService service;
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<User>> findAll(){
         List<User> list = service.findAll();
         return ResponseEntity.ok().body(list);

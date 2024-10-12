@@ -1,4 +1,4 @@
-package com.libraryproject.library.repositories.services;
+package com.libraryproject.library.services;
 
 import com.libraryproject.library.entities.User;
 import com.libraryproject.library.repositories.UserRepository;
