@@ -18,6 +18,7 @@ public class Loan implements Serializable {
     private Long id;
     private Instant moment;
     private Instant returnDay;
+    private Integer status;
 
     @JsonIgnore
     @ManyToOne
@@ -26,11 +27,12 @@ public class Loan implements Serializable {
 
     public Loan(){}
 
-    public Loan(Long id, Instant moment, Instant returnDay, User client) {
+    public Loan(Long id, Instant moment, Instant returnDay, User client, LoanStatus status) {
         this.id = id;
         this.moment = moment;
         this.returnDay = returnDay;
         this.client = client;
+        setStatus(status);
     }
 
     public Long getId() {
@@ -63,6 +65,16 @@ public class Loan implements Serializable {
 
     public void setClient(User client) {
         this.client = client;
+    }
+
+    public LoanStatus getStatus() {
+        return LoanStatus.valueOf(status);
+    }
+
+    public void setStatus(LoanStatus status) {
+        if(status != null){
+            this.status = status.getCode();
+        }
     }
 
     @Override
