@@ -48,11 +48,11 @@ public class TestConfig implements CommandLineRunner {
         Gender gender2 = new Gender(null, "Desenvolvimento Pessoal");
         Gender gender3 = new Gender(null, "Science Fiction");
 
-        Book book1 = new Book(null, "Dom Casmurro", "Machado de Assis", 208, 978_8594318602L, 24.90, "");
-        Book book2 = new Book(null, "A arte da guerra", "Sun Tzu", 80, 978_6584956230L, 49.90, "");
-        Book book3 = new Book(null, "Diário estoico", "Ryan Holiday", 496, 978_6555605556L, 64.90, "");
-        Book book4 = new Book(null, "Box Duna: Primeira Trilogia", "Frank Herbert", 1480, 978_6586064414L, 299.90, "");
-        Book book5 = new Book(null, "Middlemarch", "George Eliot", 880, 978_0141196893L, 149.90, "");
+        Book book1 = new Book(null, "Dom Casmurro", "Machado de Assis", 208, 978_8594318602L, 24.90, "", gender1);
+        Book book2 = new Book(null, "A arte da guerra", "Sun Tzu", 80, 978_6584956230L, 49.90, "", gender2);
+        Book book3 = new Book(null, "Diário estoico", "Ryan Holiday", 496, 978_6555605556L, 64.90, "", gender2);
+        Book book4 = new Book(null, "Box Duna: Primeira Trilogia", "Frank Herbert", 1480, 978_6586064414L, 299.90, "", gender3);
+        Book book5 = new Book(null, "Middlemarch", "George Eliot", 880, 978_0141196893L, 149.90, "", gender1);
 
 
         userRepository.saveAll(Arrays.asList(client1, client2));

@@ -10,6 +10,7 @@ import java.util.Objects;
 
 
 @Entity
+@Table(name = "loans")
 public class Loan implements Serializable {
 
     @Id

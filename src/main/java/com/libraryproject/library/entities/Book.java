@@ -1,14 +1,16 @@
 package com.libraryproject.library.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Table(name = "books")
 public class Book implements Serializable {
 
     @Id
@@ -22,10 +24,20 @@ public class Book implements Serializable {
     private String imgUrl;
     private boolean available = true;
 
+
+    @ManyToMany
+    @JoinTable(name = "book_gender",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "gender_id")
+    )
+    @JsonIgnoreProperties("book")
+    private List<Gender> genders = new ArrayList<>();
+
+
     public Book() {}
 
     public Book(Long id, String name, String author, Integer pages,
-                Long isbn, Double price, String imgUrl) {
+                Long isbn, Double price, String imgUrl, Gender gender) {
         this.id = id;
         this.name = name;
         this.author = author;
@@ -33,6 +45,7 @@ public class Book implements Serializable {
         this.isbn = isbn;
         this.price = price;
         this.imgUrl = imgUrl;
+        this.genders.add(gender);
     }
 
     public Long getId() {
@@ -98,6 +111,11 @@ public class Book implements Serializable {
     public void setAvailable(boolean available) {
         this.available = available;
     }
+
+    public List<Gender> getGenders() {
+        return genders;
+    }
+
 
     @Override
     public boolean equals(Object o) {

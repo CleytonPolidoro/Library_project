@@ -1,20 +1,26 @@
 package com.libraryproject.library.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Table(name = "genders")
 public class Gender implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
+    @ManyToMany(mappedBy = "genders")
+    @JsonIgnoreProperties("genders")
+    private List<Book> book = new ArrayList<>();
 
     public Gender(){
     }
@@ -38,6 +44,10 @@ public class Gender implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Book> getBook() {
+        return book;
     }
 
     @Override
