@@ -6,7 +6,10 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 
 @Entity
@@ -24,6 +27,9 @@ public class Loan implements Serializable {
     @ManyToOne
     @JoinColumn(name = "client_id")
     private User client;
+
+    @OneToMany(mappedBy = "id.loan")
+    private Set<LoanItem> items = new HashSet<>();
 
     public Loan(){}
 
@@ -75,6 +81,10 @@ public class Loan implements Serializable {
         if(status != null){
             this.status = status.getCode();
         }
+    }
+
+    public Set<LoanItem> getItems() {
+        return items;
     }
 
     @Override
