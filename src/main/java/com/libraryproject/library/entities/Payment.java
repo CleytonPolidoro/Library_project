@@ -1,0 +1,67 @@
+package com.libraryproject.library.entities;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+
+import java.time.Instant;
+import java.util.Objects;
+
+@Entity
+public class Payment {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private Instant moment;
+
+    @JsonIgnore
+    @OneToOne
+    @MapsId
+    private Loan loan;
+
+    public Payment(){
+    }
+
+    public Payment(Long id, Instant moment, Loan loan) {
+        this.id = id;
+        this.moment = moment;
+        this.loan = loan;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Instant getMoment() {
+        return moment;
+    }
+
+    public void setMoment(Instant moment) {
+        this.moment = moment;
+    }
+
+    public Loan getLoan() {
+        return loan;
+    }
+
+    public void setLoan(Loan loan) {
+        this.loan = loan;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Payment payment = (Payment) o;
+        return Objects.equals(id, payment.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+}

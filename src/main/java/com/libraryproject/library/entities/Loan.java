@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -30,6 +29,9 @@ public class Loan implements Serializable {
 
     @OneToMany(mappedBy = "id.loan")
     private Set<LoanItem> items = new HashSet<>();
+
+    @OneToOne(mappedBy = "loan", cascade = CascadeType.ALL)
+    private Payment payment;
 
     public Loan(){}
 
@@ -85,6 +87,14 @@ public class Loan implements Serializable {
 
     public Set<LoanItem> getItems() {
         return items;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 
     @Override

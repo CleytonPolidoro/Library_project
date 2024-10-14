@@ -48,6 +48,8 @@ public class TestConfig implements CommandLineRunner {
 
         loanRepository.saveAll(Arrays.asList(l1, l2, l3));
 
+
+
         Gender gender1 = new Gender(null, "Romance");
         Gender gender2 = new Gender(null, "Desenvolvimento Pessoal");
         Gender gender3 = new Gender(null, "Science Fiction");
@@ -69,5 +71,8 @@ public class TestConfig implements CommandLineRunner {
 
         loanItemRepository.saveAll(Arrays.asList(li1, li2, li3, li4));
 
+        Payment payment = new Payment(null, Instant.parse("2024-10-11T20:53:07Z"), l1);
+        l1.setPayment(payment);
+        loanRepository.save(l1);
     }
 }
