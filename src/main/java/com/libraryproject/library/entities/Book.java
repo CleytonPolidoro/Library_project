@@ -5,9 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "books")
@@ -31,8 +29,10 @@ public class Book implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "gender_id")
     )
     @JsonIgnoreProperties("book")
-    private List<Gender> genders = new ArrayList<>();
+    private Set<Gender> genders = new HashSet<>();
 
+    @OneToMany(mappedBy = "id.book")
+    private Set<LoanItem> loans = new HashSet<>();
 
     public Book() {}
 
@@ -112,10 +112,18 @@ public class Book implements Serializable {
         this.available = available;
     }
 
-    public List<Gender> getGenders() {
+    public Set<Gender> getGenders() {
         return genders;
     }
 
+    @JsonIgnore
+    public Set<Loan> getLoans() {
+        Set<Loan> set = new HashSet<>();
+        for (LoanItem loan : loans) {
+            set.add(loan.getLoan());
+        }
+        return set;
+    }
 
     @Override
     public boolean equals(Object o) {
