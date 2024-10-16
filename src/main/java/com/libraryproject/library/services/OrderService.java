@@ -1,23 +1,23 @@
 package com.libraryproject.library.services;
 
-import com.libraryproject.library.entities.Loan;
-import com.libraryproject.library.repositories.LoanRepository;
+import com.libraryproject.library.entities.Order;
+import com.libraryproject.library.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class LoanService {
+public class OrderService {
 
     @Autowired
-    private LoanRepository repository;
+    private OrderRepository repository;
 
-    public List<Loan> findAll(){
+    public List<Order> findAll(){
         return repository.findAll();
     }
 
-    public Loan findById(Long id){
+    public Order findById(Long id){
         return repository.findById(id).get();
     }
 

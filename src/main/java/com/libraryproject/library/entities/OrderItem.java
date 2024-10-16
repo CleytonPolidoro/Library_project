@@ -1,29 +1,28 @@
 package com.libraryproject.library.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.libraryproject.library.entities.pk.LoanItemPK;
+import com.libraryproject.library.entities.pk.OrderItemPK;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import java.util.Objects;
 
 @Entity
-@Table(name = "Loan_item")
-public class LoanItem {
+@Table(name = "Order_item")
+public class OrderItem {
 
     @EmbeddedId
-    private LoanItemPK id = new LoanItemPK();
+    private OrderItemPK id = new OrderItemPK();
     private Integer quantity;
     private Double price;
 
-    public LoanItem() {
+    public OrderItem() {
     }
 
-    public LoanItem(Loan loan, Book book, Integer quantity, Double price) {
+    public OrderItem(Order order, Book book, Integer quantity, Double price) {
         id.setBook(book);
-        id.setLoan(loan);
+        id.setOrder(order);
         this.quantity = quantity;
         this.price = price;
     }
@@ -45,12 +44,12 @@ public class LoanItem {
     }
 
     @JsonIgnore
-    public Loan getLoan(){
-        return id.getLoan();
+    public Order getOrder(){
+        return id.getOrder();
     }
 
-    public void setLoan(Loan loan){
-        id.setLoan(loan);
+    public void setOrder(Order order){
+        id.setOrder(order);
     }
 
 
@@ -66,8 +65,8 @@ public class LoanItem {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        LoanItem loanItem = (LoanItem) o;
-        return Objects.equals(id, loanItem.id);
+        OrderItem orderItem = (OrderItem) o;
+        return Objects.equals(id, orderItem.id);
     }
 
     @Override

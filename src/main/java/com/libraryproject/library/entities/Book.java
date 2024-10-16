@@ -32,7 +32,7 @@ public class Book implements Serializable {
     private Set<Gender> genders = new HashSet<>();
 
     @OneToMany(mappedBy = "id.book")
-    private Set<LoanItem> loans = new HashSet<>();
+    private Set<OrderItem> orders = new HashSet<>();
 
     public Book() {}
 
@@ -117,10 +117,10 @@ public class Book implements Serializable {
     }
 
     @JsonIgnore
-    public Set<Loan> getLoans() {
-        Set<Loan> set = new HashSet<>();
-        for (LoanItem loan : loans) {
-            set.add(loan.getLoan());
+    public Set<Order> getOrders() {
+        Set<Order> set = new HashSet<>();
+        for (OrderItem order : orders) {
+            set.add(order.getOrder());
         }
         return set;
     }

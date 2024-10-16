@@ -1,7 +1,7 @@
 package com.libraryproject.library.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.libraryproject.library.entities.enums.LoanStatus;
+import com.libraryproject.library.entities.enums.OrderStatus;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -12,14 +12,13 @@ import java.util.Set;
 
 
 @Entity
-@Table(name = "loans")
-public class Loan implements Serializable {
+@Table(name = "orders")
+public class Order implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Instant moment;
-    private Instant returnDay;
     private Integer status;
 
     @JsonIgnore
@@ -27,18 +26,17 @@ public class Loan implements Serializable {
     @JoinColumn(name = "client_id")
     private User client;
 
-    @OneToMany(mappedBy = "id.loan")
-    private Set<LoanItem> items = new HashSet<>();
+    @OneToMany(mappedBy = "id.order")
+    private Set<OrderItem> items = new HashSet<>();
 
-    @OneToOne(mappedBy = "loan", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
 
-    public Loan(){}
+    public Order(){}
 
-    public Loan(Long id, Instant moment, Instant returnDay, User client, LoanStatus status) {
+    public Order(Long id, Instant moment, User client, OrderStatus status) {
         this.id = id;
         this.moment = moment;
-        this.returnDay = returnDay;
         this.client = client;
         setStatus(status);
     }
@@ -59,14 +57,6 @@ public class Loan implements Serializable {
         this.moment = moment;
     }
 
-    public Instant getReturnDay() {
-        return returnDay;
-    }
-
-    public void setReturnDay(Instant returnDay) {
-        this.returnDay = returnDay;
-    }
-
     public User getClient() {
         return client;
     }
@@ -75,17 +65,17 @@ public class Loan implements Serializable {
         this.client = client;
     }
 
-    public LoanStatus getStatus() {
-        return LoanStatus.valueOf(status);
+    public OrderStatus getStatus() {
+        return OrderStatus.valueOf(status);
     }
 
-    public void setStatus(LoanStatus status) {
+    public void setStatus(OrderStatus status) {
         if(status != null){
             this.status = status.getCode();
         }
     }
 
-    public Set<LoanItem> getItems() {
+    public Set<OrderItem> getItems() {
         return items;
     }
 
@@ -101,8 +91,8 @@ public class Loan implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Loan loan = (Loan) o;
-        return Objects.equals(id, loan.id);
+        Order order = (Order) o;
+        return Objects.equals(id, order.id);
     }
 
     @Override

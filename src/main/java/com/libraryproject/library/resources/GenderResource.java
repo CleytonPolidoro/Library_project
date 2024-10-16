@@ -1,7 +1,6 @@
 package com.libraryproject.library.resources;
 
 import com.libraryproject.library.entities.Gender;
-import com.libraryproject.library.entities.Loan;
 import com.libraryproject.library.services.GenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package com.libraryproject.library.entities.enums;
 
-public enum LoanStatus {
+public enum OrderStatus {
     WAITING_PAYMENT(1),
     PAID(2),
     SHIPPED(3),
@@ -8,7 +8,7 @@ public enum LoanStatus {
     CANCELED(5);
 
     private int code;
-    private LoanStatus(int code) {
+    private OrderStatus(int code) {
         this.code = code;
     }
 
@@ -16,10 +16,10 @@ public enum LoanStatus {
         return code;
     }
 
-    public static LoanStatus valueOf(int code) {
-        for(LoanStatus loanStatus : LoanStatus.values()) {
-            if(loanStatus.getCode() == code) {
-                return loanStatus;
+    public static OrderStatus valueOf(int code) {
+        for(OrderStatus orderStatus : OrderStatus.values()) {
+            if(orderStatus.getCode() == code) {
+                return orderStatus;
             }
         }
         throw new IllegalArgumentException("Invalid order status code");
