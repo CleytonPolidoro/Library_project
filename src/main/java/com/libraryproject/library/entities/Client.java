@@ -1,5 +1,6 @@
 package com.libraryproject.library.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 
@@ -7,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Client extends User{
-    private Double fines= 0.0;
+public class Client extends User {
 
     @OneToMany(mappedBy = "client")
+    @JsonIgnoreProperties("client")
     private List<Order> orders = new ArrayList<>();
 
     public Client(Long id, String name, String email, String password, String phone) {
@@ -20,15 +21,11 @@ public class Client extends User{
     public Client() {
     }
 
-    public Double getFines() {
-        return fines;
-    }
-
-    public void setFines(Double fines) {
-        this.fines = fines;
-    }
 
     public List<Order> getOrders() {
+
         return orders;
     }
+
+
 }

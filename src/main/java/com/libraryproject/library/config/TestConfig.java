@@ -32,18 +32,18 @@ public class TestConfig implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        User client1 = new Client(null, "Maria Brown", "maria@gmail.com", "988888888", "123456");
-        User client2 = new Client(null, "Alex Green", "alex@gmail.com", "977777777", "123456");
+        Client client1 = new Client(null, "Maria Brown", "maria@gmail.com", "988888888", "123456");
+        Client client2 = new Client(null, "Alex Green", "alex@gmail.com", "977777777", "123456");
 
         userRepository.saveAll(Arrays.asList(client1, client2));
 
-        Order l1 = new Order(null, Instant.parse("2024-10-11T19:53:07Z"), client1, OrderStatus.valueOf(2));
+        Order o1 = new Order(null, Instant.parse("2024-10-11T19:53:07Z"), client1, OrderStatus.valueOf(2));
 
-        Order l2 = new Order(null, Instant.parse("2024-10-09T03:42:10Z"), client2, OrderStatus.valueOf(1));
+        Order o2 = new Order(null, Instant.parse("2024-10-09T03:42:10Z"), client2, OrderStatus.valueOf(1));
 
-        Order l3 = new Order(null, Instant.parse("2024-10-05T15:21:22Z"), client1, OrderStatus.valueOf(1));
+        Order o3 = new Order(null, Instant.parse("2024-10-05T15:21:22Z"), client1, OrderStatus.valueOf(1));
 
-        orderRepository.saveAll(Arrays.asList(l1, l2, l3));
+        orderRepository.saveAll(Arrays.asList(o1, o2, o3));
 
 
 
@@ -61,15 +61,19 @@ public class TestConfig implements CommandLineRunner {
 
         bookRepository.saveAll(Arrays.asList(book1, book2, book3, book4, book5));
 
-        OrderItem li1 = new OrderItem(l1, book1, 2, book1.getPrice());
-        OrderItem li2 = new OrderItem(l1, book3, 1, book3.getPrice());
-        OrderItem li3 = new OrderItem(l2, book3, 2, book3.getPrice());
-        OrderItem li4 = new OrderItem(l3, book5, 2, book5.getPrice());
+        OrderItem oi1 = new OrderItem(o1, book1, 2, book1.getPrice());
+        OrderItem oi2 = new OrderItem(o1, book3, 1, book3.getPrice());
+        OrderItem oi3 = new OrderItem(o2, book3, 2, book3.getPrice());
+        OrderItem oi4 = new OrderItem(o3, book5, 2, book5.getPrice());
 
-        orderItemRepository.saveAll(Arrays.asList(li1, li2, li3, li4));
+        orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
 
-        Payment payment = new Payment(null, Instant.parse("2024-10-11T20:53:07Z"), l1);
-        l1.setPayment(payment);
-        orderRepository.save(l1);
+        Payment payment = new Payment(null, Instant.parse("2024-10-11T20:53:07Z"), o1);
+        o1.setPayment(payment);
+        orderRepository.save(o1);
+        client1.getOrders().addAll(Arrays.asList(o1, o2));
+        client2.getOrders().add(o2);
+
+        userRepository.saveAll(Arrays.asList(client1, client2));
     }
 }

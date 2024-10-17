@@ -1,6 +1,7 @@
 package com.libraryproject.library.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.libraryproject.library.entities.enums.OrderStatus;
 import jakarta.persistence.*;
 
@@ -21,9 +22,9 @@ public class Order implements Serializable {
     private Instant moment;
     private Integer status;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "client_id")
+    @JsonIgnoreProperties("orders")
     private User client;
 
     @OneToMany(mappedBy = "id.order")
@@ -39,6 +40,15 @@ public class Order implements Serializable {
         this.moment = moment;
         this.client = client;
         setStatus(status);
+    }
+
+    public Double getTotal(){
+        Double total = 0.0;
+        for (OrderItem item : items) {
+            total += item.getSubTotal();
+        }
+
+        return total;
     }
 
     public Long getId() {
