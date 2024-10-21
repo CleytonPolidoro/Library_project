@@ -1,5 +1,6 @@
 package com.libraryproject.library.entities;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "users")
+@JsonDeserialize(as = Client.class)
 public abstract class User implements Serializable {
 
     @Id

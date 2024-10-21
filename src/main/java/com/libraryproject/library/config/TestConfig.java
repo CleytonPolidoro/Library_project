@@ -32,8 +32,8 @@ public class TestConfig implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Client client1 = new Client(null, "Maria Brown", "maria@gmail.com", "988888888", "123456");
-        Client client2 = new Client(null, "Alex Green", "alex@gmail.com", "977777777", "123456");
+        Client client1 = new Client(null, "Maria Brown", "maria@gmail.com", "123456", "988888888");
+        Client client2 = new Client(null, "Alex Green", "alex@gmail.com", "123456", "977777777");
 
         userRepository.saveAll(Arrays.asList(client1, client2));
 
