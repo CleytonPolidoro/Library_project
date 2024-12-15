@@ -7,9 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Set;
 
 @Configuration
 @Profile("test")
@@ -28,10 +31,37 @@ public class TestConfig implements CommandLineRunner {
     private BookRepository bookRepository;
 
     @Autowired
-    OrderItemRepository orderItemRepository;
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+
 
     @Override
+    @Transactional
     public void run(String... args) throws Exception {
+
+        Role role = new Role(Role.Values.ADMIN.name());
+        roleRepository.save(role);
+        var roleAdmin = roleRepository.findByName(Role.Values.ADMIN.name());
+
+        var userAdmin = userRepository.findByName("admin");
+
+        userAdmin.ifPresentOrElse(
+                user -> System.out.print("Usuário já cadastrado"),
+                () -> {
+                    User user = new User();
+                    user.setName("admin");
+                    user.setPassword(passwordEncoder.encode("123"));
+                    user.setRoles(Set.of(roleAdmin));
+                    userRepository.save(user);
+                }
+
+        );
+
         Client client1 = new Client(null, "Maria Brown", "maria@gmail.com", "123456", "988888888");
         Client client2 = new Client(null, "Alex Green", "alex@gmail.com", "123456", "977777777");
 

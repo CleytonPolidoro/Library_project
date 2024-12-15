@@ -1,16 +1,19 @@
 package com.libraryproject.library.entities;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.libraryproject.library.resources.dto.LoginRequest;
 import jakarta.persistence.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.Serializable;
 import java.lang.annotation.Inherited;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
 @JsonDeserialize(as = Client.class)
-public abstract class User implements Serializable {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +22,12 @@ public abstract class User implements Serializable {
     private String email;
     private String password;
     private String phone;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "roles_id")
+    )
+    private Set<Role> roles;
 
     public User(){};
 
@@ -70,6 +79,14 @@ public abstract class User implements Serializable {
         this.phone = phone;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -81,5 +98,9 @@ public abstract class User implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    public boolean isLoginCorrect(LoginRequest loginRequest, PasswordEncoder passwordEncoder) {
+        return passwordEncoder.matches(loginRequest.password(), this.password);
     }
 }

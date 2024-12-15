@@ -10,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -25,6 +26,9 @@ public class UserService {
         return repository.findById(id).orElseThrow(()-> new ResourceNotFoundException(id));
     }
 
+    public Optional<User> findByName(String name){
+        return repository.findByName(name);
+    }
     public User insert(User user){
         return repository.save(user);
     }
