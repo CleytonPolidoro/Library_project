@@ -27,13 +27,13 @@ public class UserService {
     }
 
     public Optional<User> findByName(String name){
-        return repository.findByName(name);
+        return repository.findByUsername(name);
     }
     public User insert(User user){
         return repository.save(user);
     }
 
-    public void delete(Long id){
+    public void deleteById(Long id){
         try {
             if(!repository.existsById(id)){
                 throw new ResourceNotFoundException(id);
@@ -55,7 +55,7 @@ public class UserService {
     }
 
     private void updateData(User entity, User user) {
-        entity.setName(user.getName());
+        entity.setUsername(user.getUsername());
         entity.setEmail(user.getEmail());
         entity.setPhone(user.getPhone());
     }

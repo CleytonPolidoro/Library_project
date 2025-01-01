@@ -1,5 +1,6 @@
 package com.libraryproject.library.resources;
 
+import com.libraryproject.library.entities.Role;
 import com.libraryproject.library.resources.dto.LoginRequest;
 import com.libraryproject.library.resources.dto.LoginResponse;
 import com.libraryproject.library.services.UserService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
+import java.util.stream.Collectors;
 
 @RestController
 public class TokenResource {
@@ -40,12 +42,15 @@ public class TokenResource {
 
         var now = Instant.now();
         var expiresIn = 300L;
+        var scopes = user.get().getRoles().stream().
+                map(Role::getName).collect(Collectors.joining(" "));
 
         var claims = JwtClaimsSet.builder()
                 .issuer("mybackend")
                 .subject(user.get().getId().toString())
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(expiresIn))
+                .claim("scope", scopes)
                 .build();
 
         var jwtValue = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();

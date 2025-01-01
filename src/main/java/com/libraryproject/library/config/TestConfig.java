@@ -44,17 +44,18 @@ public class TestConfig implements CommandLineRunner {
     @Transactional
     public void run(String... args) throws Exception {
 
-        Role role = new Role(Role.Values.ADMIN.name());
-        roleRepository.save(role);
+        Role role1 = new Role(Role.Values.ADMIN.name());
+        Role role2 = new Role(Role.Values.BASIC.name());
+        roleRepository.saveAll(Arrays.asList(role1, role2));
         var roleAdmin = roleRepository.findByName(Role.Values.ADMIN.name());
 
-        var userAdmin = userRepository.findByName("admin");
+        var userAdmin = userRepository.findByUsername("admin");
 
         userAdmin.ifPresentOrElse(
                 user -> System.out.print("Usuário já cadastrado"),
                 () -> {
                     User user = new User();
-                    user.setName("admin");
+                    user.setUsername("admin");
                     user.setPassword(passwordEncoder.encode("123"));
                     user.setRoles(Set.of(roleAdmin));
                     userRepository.save(user);

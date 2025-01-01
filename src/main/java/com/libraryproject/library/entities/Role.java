@@ -14,9 +14,6 @@ public class Role {
     private Long id;
     private String name;
 
-    @ManyToMany
-    private Set<User> user;
-
     public Role() {
         
     }
