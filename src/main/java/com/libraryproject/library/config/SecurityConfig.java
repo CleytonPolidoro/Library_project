@@ -47,6 +47,8 @@ public class SecurityConfig {
                 .authorizeRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                        .requestMatchers("/genders").permitAll()
+                        .requestMatchers ( "/books" ). permitAll ()
                         .requestMatchers ( "/h2-console/**" ). permitAll ()
                         .anyRequest().authenticated())
                 .headers ( headers -> headers. frameOptions (HeadersConfigurer. FrameOptionsConfig::disable))

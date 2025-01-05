@@ -2,6 +2,7 @@ package com.libraryproject.library.services;
 
 import com.libraryproject.library.entities.Book;
 import com.libraryproject.library.repositories.BookRepository;
+import com.libraryproject.library.services.exceptions.UnprocessableException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
@@ -32,6 +33,17 @@ public class BookService {
 
     public List<Book> findByTitle(String title){
         return repository.findByTitleContainingIgnoreCase(title);
+    }
+
+    public Book save(Book book){
+
+        boolean bookExist = repository.findAll().stream().anyMatch(b -> b.getTitle().equalsIgnoreCase(book.getTitle())
+                && b.getAuthor().equalsIgnoreCase(book.getAuthor()));
+
+        if(bookExist){
+            throw new UnprocessableException("Book already exists");
+        }
+        return repository.save(book);
     }
 
 }

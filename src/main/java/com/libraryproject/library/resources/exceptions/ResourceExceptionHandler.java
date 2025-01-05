@@ -2,6 +2,7 @@ package com.libraryproject.library.resources.exceptions;
 
 import com.libraryproject.library.services.exceptions.DatabaseException;
 import com.libraryproject.library.services.exceptions.ResourceNotFoundException;
+import com.libraryproject.library.services.exceptions.UnprocessableException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,5 +30,11 @@ public class ResourceExceptionHandler {
         return ResponseEntity.status(status).body(err);
     }
 
-
+    @ExceptionHandler(UnprocessableException.class)
+    public ResponseEntity<StandardError> Unprocessable(UnprocessableException e, HttpServletRequest request){
+        String error = "This feature already exists.";
+        HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
+        StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
 }

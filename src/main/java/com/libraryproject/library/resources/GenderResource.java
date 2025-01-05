@@ -4,10 +4,8 @@ import com.libraryproject.library.entities.Gender;
 import com.libraryproject.library.services.GenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,6 +25,13 @@ public class GenderResource {
     @GetMapping(value = "/{id}")
     public ResponseEntity<Gender> findById(@PathVariable Long id){
         Gender gender = service.findById(id);
+        return ResponseEntity.ok().body(gender);
+    }
+
+    @PostMapping
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    public ResponseEntity<Gender> create(@RequestBody Gender gender){
+        service.save(gender);
         return ResponseEntity.ok().body(gender);
     }
 

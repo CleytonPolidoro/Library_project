@@ -63,8 +63,6 @@ public class UserResource {
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<Void> deleteById(@PathVariable Long id){
-
-
         service.deleteById(id);
         return ResponseEntity.ok().build();
     }

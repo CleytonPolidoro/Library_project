@@ -4,6 +4,7 @@ import com.libraryproject.library.entities.Book;
 import com.libraryproject.library.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,4 +45,12 @@ public class BookResource {
         List<Book> list = service.findByTitle(title);
         return ResponseEntity.ok().body(list);
     }
+
+    @PostMapping()
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    public ResponseEntity<Book> save(@RequestBody Book book){
+        service.save(book);
+        return ResponseEntity.ok().body(book);
+    }
+
 }
