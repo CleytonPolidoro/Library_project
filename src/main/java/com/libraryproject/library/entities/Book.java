@@ -32,7 +32,7 @@ public class Book implements Serializable {
     private Set<Gender> genders = new HashSet<>();
 
     @OneToMany(mappedBy = "id.book")
-    private Set<OrderItem> orders = new HashSet<>();
+    private Set<OrderItem> items = new HashSet<>();
 
     public Book() {}
 
@@ -116,14 +116,17 @@ public class Book implements Serializable {
         return genders;
     }
 
-    @JsonIgnore
-    public Set<Order> getOrders() {
-        Set<Order> set = new HashSet<>();
-        for (OrderItem order : orders) {
-            set.add(order.getOrder());
-        }
-        return set;
+    public Set<OrderItem> getItems(){
+        return items;
     }
+
+    @JsonIgnore
+    public List<Order> getOrders() {
+
+        return items.stream().map(x -> x.getOrder()).toList();
+
+    }
+
 
     @Override
     public boolean equals(Object o) {

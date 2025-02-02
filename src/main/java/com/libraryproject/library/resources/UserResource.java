@@ -2,6 +2,7 @@ package com.libraryproject.library.resources;
 
 import com.libraryproject.library.entities.Role;
 import com.libraryproject.library.entities.User;
+import com.libraryproject.library.resources.dto.CreateUserDTO;
 import com.libraryproject.library.services.RoleService;
 import com.libraryproject.library.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,9 @@ public class UserResource {
 
     @Transactional
     @PostMapping()
-    public ResponseEntity<User> save(@RequestBody User user){
+    public ResponseEntity<User> save(@RequestBody CreateUserDTO dto){
+
+        User user = new User();
 
         Role basicRole = roleService.findByName(Role.Values.BASIC.name());
         Set<Role> roles = new HashSet<>();

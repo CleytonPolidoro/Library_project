@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -19,6 +20,8 @@ public class Order implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant moment;
     private Integer status;
 
@@ -87,6 +90,10 @@ public class Order implements Serializable {
 
     public Set<OrderItem> getItems() {
         return items;
+    }
+
+    public List<Book> getBooks(){
+        return items.stream().map(x -> x.getBook()).toList();
     }
 
     public Payment getPayment() {
