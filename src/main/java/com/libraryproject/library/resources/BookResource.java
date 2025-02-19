@@ -1,6 +1,7 @@
 package com.libraryproject.library.resources;
 
 import com.libraryproject.library.entities.Book;
+import com.libraryproject.library.entities.dto.BookDTO;
 import com.libraryproject.library.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,40 +18,41 @@ public class BookResource {
     private BookService service;
 
     @GetMapping
-    public ResponseEntity<List<Book>> findAll(){
-        List<Book> list = service.findAll();
+    public ResponseEntity<List<BookDTO>> findAll(){
+        List<BookDTO> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Book> findById(@PathVariable Long id){
-        Book book = service.findById(id);
+    public ResponseEntity<BookDTO> findById(@PathVariable Long id){
+        BookDTO book = service.findById(id);
         return ResponseEntity.ok().body(book);
     }
 
     @GetMapping(value = "/author/{author}")
-    public ResponseEntity<List<Book>> findByAuthor(@PathVariable String author){
-        List<Book> list = service.findByAuthor(author);
+    public ResponseEntity<List<BookDTO>> findByAuthor(@PathVariable String author){
+        List<BookDTO> list = service.findByAuthor(author);
         return ResponseEntity.ok().body(list);
     }
 
     @GetMapping(value = "/gender/{gender}")
-    public ResponseEntity<List<Book>> findByGendersName(@PathVariable String gender){
-        List<Book> list = service.findByGendersName(gender);
+    public ResponseEntity<List<BookDTO>> findByGendersName(@PathVariable String gender){
+        List<BookDTO> list = service.findByGendersName(gender);
         return ResponseEntity.ok().body(list);
     }
 
     @GetMapping(value = "/title/{title}")
-    public ResponseEntity<List<Book>> findByTitle(@PathVariable String title){
-        List<Book> list = service.findByTitle(title);
+    public ResponseEntity<List<BookDTO>> findByTitle(@PathVariable String title){
+        List<BookDTO> list = service.findByTitle(title);
         return ResponseEntity.ok().body(list);
     }
 
     @PostMapping()
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<Book> save(@RequestBody Book book){
-        service.save(book);
-        return ResponseEntity.ok().body(book);
+    public ResponseEntity<BookDTO> save(@RequestBody Book book){
+        service.insert(book);
+        BookDTO dto = new BookDTO(book);
+        return ResponseEntity.ok().body(dto);
     }
 
 }

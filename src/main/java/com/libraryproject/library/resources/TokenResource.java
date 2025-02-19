@@ -1,8 +1,9 @@
 package com.libraryproject.library.resources;
 
 import com.libraryproject.library.entities.Role;
-import com.libraryproject.library.resources.dto.LoginRequest;
-import com.libraryproject.library.resources.dto.LoginResponse;
+import com.libraryproject.library.entities.dto.LoginRequestDTO;
+import com.libraryproject.library.entities.dto.LoginResponseDTO;
+import com.libraryproject.library.repositories.UserRepository;
 import com.libraryproject.library.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -23,20 +24,22 @@ public class TokenResource {
     private final JwtEncoder jwtEncoder;
 
     private final UserService service;
+;
 
     private BCryptPasswordEncoder passwordEncoder;
 
-    public TokenResource(JwtEncoder jwtEncoder, UserService service, BCryptPasswordEncoder passwordEncoder) {
+    public TokenResource(JwtEncoder jwtEncoder, UserService service, UserRepository repository, BCryptPasswordEncoder passwordEncoder) {
         this.jwtEncoder = jwtEncoder;
         this.service = service;
         this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
-        var user = service.findByName(loginRequest.username());
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO) {
 
-        if(user.isEmpty() || !user.get().isLoginCorrect(loginRequest, passwordEncoder)){
+        var user = service.findUsernameForToken(loginRequestDTO.username());
+
+        if(user.isEmpty() || !user.get().isLoginCorrect(loginRequestDTO, passwordEncoder)){
           throw new BadCredentialsException("Invalid username or password!");
         }
 
@@ -55,6 +58,6 @@ public class TokenResource {
 
         var jwtValue = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 
-        return ResponseEntity.ok(new LoginResponse(jwtValue, expiresIn));
+        return ResponseEntity.ok(new LoginResponseDTO(jwtValue, expiresIn));
     }
 }

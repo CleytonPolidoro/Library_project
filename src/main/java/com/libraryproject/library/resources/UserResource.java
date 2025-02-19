@@ -2,7 +2,8 @@ package com.libraryproject.library.resources;
 
 import com.libraryproject.library.entities.Role;
 import com.libraryproject.library.entities.User;
-import com.libraryproject.library.resources.dto.CreateUserDTO;
+import com.libraryproject.library.entities.dto.CreateUserDTO;
+import com.libraryproject.library.entities.dto.UserDTO;
 import com.libraryproject.library.services.RoleService;
 import com.libraryproject.library.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,23 +31,27 @@ public class UserResource {
 
     private final BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
 
+
+    @Transactional(readOnly = true)
     @GetMapping
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<List<User>> findAll(){
-        List<User> list = service.findAll();
+    public ResponseEntity<List<UserDTO>> findAll(){
+        List<UserDTO> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
 
+    @Transactional(readOnly = true)
     @GetMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<User> findById(@PathVariable Long id){
-        User user = service.findById(id);
-        return ResponseEntity.ok().body(user);
+    public ResponseEntity<UserDTO> findById(@PathVariable Long id){
+        UserDTO dto = service.findById(id);
+        return ResponseEntity.ok().body(dto);
     }
 
     @Transactional
-    @PostMapping()
-    public ResponseEntity<User> save(@RequestBody CreateUserDTO dto){
+    @PostMapping
+    public ResponseEntity<UserDTO> save(@RequestBody CreateUserDTO dto){
+
 
         User user = new User();
 
@@ -56,11 +61,13 @@ public class UserResource {
         user.setRoles(roles);
         user.setPassword(bCrypt.encode(user.getPassword()));
 
-        user = service.insert(user);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
+        UserDTO userDto = new UserDTO(user);
+
+        service.insert(userDto);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(userDto.getId()).toUri();
 
 
-        return ResponseEntity.created(uri).body(user);
+        return ResponseEntity.created(uri).body(userDto);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -71,9 +78,9 @@ public class UserResource {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User user){
-        user = service.update(id, user);
-        return ResponseEntity.ok().body(user);
+    public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UserDTO dto){
+        dto = service.update(id, dto);
+        return ResponseEntity.ok().body(dto);
     }
 
 }

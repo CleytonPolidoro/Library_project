@@ -1,6 +1,7 @@
 package com.libraryproject.library.resources;
 
 import com.libraryproject.library.entities.Gender;
+import com.libraryproject.library.entities.dto.GenderDTO;
 import com.libraryproject.library.services.GenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,22 +18,22 @@ public class GenderResource {
     private GenderService service;
 
     @GetMapping
-    public ResponseEntity<List<Gender>> findAll(){
-        List<Gender> list = service.findAll();
+    public ResponseEntity<List<GenderDTO>> findAll(){
+        List<GenderDTO> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Gender> findById(@PathVariable Long id){
-        Gender gender = service.findById(id);
+    public ResponseEntity<GenderDTO> findById(@PathVariable Long id){
+        GenderDTO gender = service.findById(id);
         return ResponseEntity.ok().body(gender);
     }
 
     @PostMapping
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<Gender> create(@RequestBody Gender gender){
-        service.save(gender);
-        return ResponseEntity.ok().body(gender);
+    public ResponseEntity<GenderDTO> create(@RequestBody GenderDTO dto){
+        service.save(dto);
+        return ResponseEntity.ok().body(dto);
     }
 
 }

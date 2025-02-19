@@ -1,6 +1,7 @@
 package com.libraryproject.library.resources;
 
 import com.libraryproject.library.entities.Order;
+import com.libraryproject.library.entities.dto.OrderDTO;
 import com.libraryproject.library.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +22,14 @@ public class OrderResource {
 
     @GetMapping
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<List<Order>> findAll(){
-        List<Order> list = service.findAll();
+    public ResponseEntity<List<OrderDTO>> findAll(){
+        List<OrderDTO> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Order> findById(@PathVariable Long id){
-        Order order = service.findById(id);
+    public ResponseEntity<OrderDTO> findById(@PathVariable Long id){
+        OrderDTO order = service.findById(id);
         return ResponseEntity.ok().body(order);
     }
 

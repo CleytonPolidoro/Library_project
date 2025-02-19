@@ -1,7 +1,7 @@
 package com.libraryproject.library.entities;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.libraryproject.library.resources.dto.LoginRequest;
+import com.libraryproject.library.entities.dto.LoginRequestDTO;
 import jakarta.persistence.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -101,7 +101,7 @@ public class User implements Serializable {
         return Objects.hashCode(id);
     }
 
-    public boolean isLoginCorrect(LoginRequest loginRequest, PasswordEncoder passwordEncoder) {
-        return passwordEncoder.matches(loginRequest.password(), this.password);
+    public boolean isLoginCorrect(LoginRequestDTO loginRequestDTO, PasswordEncoder passwordEncoder) {
+        return passwordEncoder.matches(loginRequestDTO.password(), this.password);
     }
 }
