@@ -2,6 +2,10 @@ package com.libraryproject.library.entities.dto;
 
 import com.libraryproject.library.entities.Book;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class BookDTO {
 
     private Long id;
@@ -12,6 +16,7 @@ public class BookDTO {
     private Double price;
     private String imgUrl;
     private boolean available;
+
 
     public BookDTO(Long id, String title, String author, Integer pages, Long isbn, Double price, String imgUrl, boolean available) {
         this.id = id;
@@ -63,7 +68,9 @@ public class BookDTO {
         return imgUrl;
     }
 
+
     public boolean isAvailable() {
         return available;
     }
+
 }

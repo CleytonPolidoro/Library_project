@@ -27,6 +27,10 @@ public class OrderItem {
         this.price = price;
     }
 
+    public OrderItemPK getId() {
+        return id;
+    }
+
     public Double getSubTotal(){
         return price * quantity;
     }

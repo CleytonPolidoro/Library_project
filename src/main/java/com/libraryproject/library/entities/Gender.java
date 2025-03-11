@@ -2,6 +2,7 @@ package com.libraryproject.library.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.libraryproject.library.entities.dto.GenderDTO;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -30,6 +31,11 @@ public class Gender implements Serializable {
         this.name = name;
     }
 
+    public Gender(GenderDTO entity){
+        id = entity.getId();
+        name = entity.getName();
+    }
+
     public Long getId() {
         return id;
     }
@@ -45,6 +51,7 @@ public class Gender implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
 
     public List<Book> getBook() {
         return book;

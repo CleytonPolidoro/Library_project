@@ -7,10 +7,7 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 
 @Entity
@@ -27,7 +24,6 @@ public class Order implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "client_id")
-    @JsonIgnoreProperties("orders")
     private User client;
 
     @OneToMany(mappedBy = "id.order")
@@ -43,6 +39,12 @@ public class Order implements Serializable {
         this.moment = moment;
         this.client = client;
         setStatus(status);
+    }
+
+    public Order(Long id, Instant moment, Integer status) {
+        this.id = id;
+        this.moment = moment;
+        this.status = status;
     }
 
     public Double getTotal(){
@@ -90,6 +92,9 @@ public class Order implements Serializable {
 
     public Set<OrderItem> getItems() {
         return items;
+    }
+    public void setItems(Set<OrderItem> items) {
+        items.addAll(items);
     }
 
     public List<Book> getBooks(){

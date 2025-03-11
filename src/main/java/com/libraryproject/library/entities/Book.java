@@ -2,10 +2,12 @@ package com.libraryproject.library.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.libraryproject.library.entities.dto.BookDTO;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "books")
@@ -24,11 +26,11 @@ public class Book implements Serializable {
 
 
     @ManyToMany
+    @JsonIgnoreProperties("books")
     @JoinTable(name = "book_gender",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "gender_id")
     )
-    @JsonIgnoreProperties("book")
     private Set<Gender> genders = new HashSet<>();
 
     @OneToMany(mappedBy = "id.book")
@@ -46,6 +48,16 @@ public class Book implements Serializable {
         this.price = price;
         this.imgUrl = imgUrl;
         this.genders.add(gender);
+    }
+
+    public Book(BookDTO entity){
+        id = entity.getId();
+        title = entity.getTitle();
+        author = entity.getAuthor();
+        pages = entity.getPages();
+        isbn = entity.getIsbn();
+        price = entity.getPrice();
+        imgUrl = entity.getImgUrl();
     }
 
     public Long getId() {

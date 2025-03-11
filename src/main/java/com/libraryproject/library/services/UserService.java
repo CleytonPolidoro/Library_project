@@ -8,6 +8,8 @@ import com.libraryproject.library.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +23,9 @@ public class UserService {
     private UserRepository repository;
 
     @Transactional(readOnly = true)
-    public List<UserDTO> findAll(){
-        List<User> users = repository.findAll();
-
-        return users.stream().map(x -> new UserDTO(x)).toList();
+    public Page<UserDTO> findAll(Pageable pageable){
+        Page<UserDTO> users = repository.searchAll(pageable);
+        return users;
     }
 
     @Transactional(readOnly = true)

@@ -4,6 +4,8 @@ import com.libraryproject.library.entities.Gender;
 import com.libraryproject.library.entities.dto.GenderDTO;
 import com.libraryproject.library.services.GenderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +20,9 @@ public class GenderResource {
     private GenderService service;
 
     @GetMapping
-    public ResponseEntity<List<GenderDTO>> findAll(){
-        List<GenderDTO> list = service.findAll();
+    public ResponseEntity<Page<GenderDTO>> findAll(Pageable pageable,
+                                                   @RequestParam(name = "gender", defaultValue = "") String gender){
+        Page<GenderDTO> list = service.findAll(pageable, gender);
         return ResponseEntity.ok().body(list);
     }
 
@@ -29,7 +32,7 @@ public class GenderResource {
         return ResponseEntity.ok().body(gender);
     }
 
-    @PostMapping
+    @PostMapping()
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<GenderDTO> create(@RequestBody GenderDTO dto){
         service.save(dto);

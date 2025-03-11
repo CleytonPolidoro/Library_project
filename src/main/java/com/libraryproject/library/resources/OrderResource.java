@@ -1,17 +1,14 @@
 package com.libraryproject.library.resources;
 
-import com.libraryproject.library.entities.Order;
 import com.libraryproject.library.entities.dto.OrderDTO;
+import com.libraryproject.library.entities.projections.OrderProjection;
 import com.libraryproject.library.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/orders")
@@ -22,9 +19,17 @@ public class OrderResource {
 
     @GetMapping
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<List<OrderDTO>> findAll(){
-        List<OrderDTO> list = service.findAll();
-        return ResponseEntity.ok().body(list);
+    public ResponseEntity<Page<OrderDTO>> findAll(Pageable pageable) {
+        Page<OrderDTO> page = service.findAll(pageable);
+        return ResponseEntity.ok().body(page);
+    }
+
+    @GetMapping("/between")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    public ResponseEntity<Page<OrderDTO>> findBetween(Pageable pageable, @RequestParam(name = "minDate", defaultValue = "") String minDate,
+                                                             @RequestParam(name = "maxDate", defaultValue = "")String maxDate){
+        Page<OrderDTO> page = service.findBetween(pageable, minDate, maxDate);
+        return ResponseEntity.ok().body(page);
     }
 
     @GetMapping(value = "/{id}")

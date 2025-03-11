@@ -1,15 +1,21 @@
 package com.libraryproject.library.services;
 
 import com.libraryproject.library.entities.Book;
+import com.libraryproject.library.entities.Gender;
 import com.libraryproject.library.entities.dto.BookDTO;
+import com.libraryproject.library.entities.dto.GenderDTO;
 import com.libraryproject.library.repositories.BookRepository;
 import com.libraryproject.library.services.exceptions.UnprocessableException;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class BookService {
 
@@ -17,9 +23,9 @@ public class BookService {
     private BookRepository repository;
 
     @Transactional(readOnly = true)
-    public List<BookDTO> findAll(){
-        List<Book> result = repository.findAll();
-        return result.stream().map(x -> new BookDTO(x)).toList();
+    public Page<BookDTO> findAll(Pageable pageable, String title){
+        Page<Book> result = repository.searchAll(pageable, title);
+        return result.map(x -> new BookDTO(x));
     }
 
     @Transactional(readOnly = true)
@@ -29,36 +35,37 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
-    public List<BookDTO> findByAuthor(String author){
+    public Page<BookDTO> findByAuthor(Pageable pageable ,String author){
 
-        List<Book> result = repository.findByAuthorContainingIgnoreCase(author);
-        return result.stream().map(x -> new BookDTO(x)).toList();
+        Page<Book> result = repository.searchByAuthor(pageable, author);
+        return result.map(x -> new BookDTO(x));
     }
 
-    @Transactional(readOnly = true)
-    public List<BookDTO>findByGendersName( String gender){
-        List<Book> result = repository.findByGendersNameContainingIgnoreCase(gender);
-
-        return result.stream().map(x -> new BookDTO(x)).toList();
-    }
-
-    @Transactional(readOnly = true)
-    public List<BookDTO> findByTitle(String title){
-        List<Book> result = repository.findByTitleContainingIgnoreCase(title);
-
-        return result.stream().map(x -> new BookDTO(x)).toList();
-    }
 
     @Transactional
-    public Book insert(Book book){
+    public BookDTO insert(BookDTO dto){
+        boolean bookExists = repository.findAll().stream().anyMatch(g -> g.getTitle() == dto.getTitle());
 
-        boolean bookExist = repository.findAll().stream().anyMatch(b -> b.getTitle().equalsIgnoreCase(book.getTitle())
-                && b.getAuthor().equalsIgnoreCase(book.getAuthor()));
-
-        if(bookExist){
-            throw new UnprocessableException("Book already exists");
+        if(bookExists){
+            throw new UnprocessableException("Gender already exists");
         }
-        return repository.save(book);
+
+        Book book = new Book();
+        copyDtoToEntity(dto, book);
+
+        Book result = repository.save(book);
+        return new BookDTO(result);
     }
 
+    private void copyDtoToEntity(BookDTO dto, Book entity) {
+        entity.setTitle(dto.getTitle());
+        entity.setAuthor(dto.getAuthor());
+        entity.setId(dto.getId());
+        entity.setAvailable(dto.isAvailable());
+        entity.setIsbn(dto.getIsbn());
+        entity.setPrice(dto.getPrice());
+        entity.setImgUrl(dto.getImgUrl());
+        entity.setPages(dto.getPages());
+
+    }
 }

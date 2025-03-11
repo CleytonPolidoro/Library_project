@@ -24,7 +24,7 @@ public class TokenResource {
     private final JwtEncoder jwtEncoder;
 
     private final UserService service;
-;
+
 
     private BCryptPasswordEncoder passwordEncoder;
 

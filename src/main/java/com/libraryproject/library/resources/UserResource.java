@@ -7,6 +7,8 @@ import com.libraryproject.library.entities.dto.UserDTO;
 import com.libraryproject.library.services.RoleService;
 import com.libraryproject.library.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -35,9 +37,9 @@ public class UserResource {
     @Transactional(readOnly = true)
     @GetMapping
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<List<UserDTO>> findAll(){
-        List<UserDTO> list = service.findAll();
-        return ResponseEntity.ok().body(list);
+    public ResponseEntity<Page<UserDTO>> findAll(Pageable pageable){
+        Page<UserDTO> page = service.findAll(pageable);
+        return ResponseEntity.ok().body(page);
     }
 
     @Transactional(readOnly = true)
@@ -50,16 +52,19 @@ public class UserResource {
 
     @Transactional
     @PostMapping
-    public ResponseEntity<UserDTO> save(@RequestBody CreateUserDTO dto){
+    public ResponseEntity<CreateUserDTO> save(@RequestBody CreateUserDTO dto){
 
 
         User user = new User();
 
         Role basicRole = roleService.findByName(Role.Values.BASIC.name());
         Set<Role> roles = new HashSet<>();
+        user.setUsername(dto.username());
+        user.setEmail(dto.email());
+        user.setPhone(dto.phone());
         roles.add(basicRole);
         user.setRoles(roles);
-        user.setPassword(bCrypt.encode(user.getPassword()));
+        user.setPassword(bCrypt.encode(dto.password()));
 
         UserDTO userDto = new UserDTO(user);
 
@@ -67,7 +72,7 @@ public class UserResource {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(userDto.getId()).toUri();
 
 
-        return ResponseEntity.created(uri).body(userDto);
+        return ResponseEntity.created(uri).body(dto);
     }
 
     @DeleteMapping(value = "/{id}")
