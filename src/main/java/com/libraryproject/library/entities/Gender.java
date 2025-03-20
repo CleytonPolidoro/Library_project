@@ -32,7 +32,6 @@ public class Gender implements Serializable {
     }
 
     public Gender(GenderDTO entity){
-        id = entity.getId();
         name = entity.getName();
     }
 

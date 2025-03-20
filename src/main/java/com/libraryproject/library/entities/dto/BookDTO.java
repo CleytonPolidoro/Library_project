@@ -1,24 +1,31 @@
 package com.libraryproject.library.entities.dto;
 
 import com.libraryproject.library.entities.Book;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class BookDTO {
 
     private Long id;
+    @Size(min = 3, message = "O valor tem que no mínimo 3 caracteres.")
+    @NotBlank(message = "O valor não pode ser vazio")
     private String title;
+
+    @Size(min = 3, message = "O valor tem que no mínimo 3 caracteres.")
+    @NotBlank(message = "O valor não pode ser vazio")
     private String author;
+    @NotNull
     private Integer pages;
     private Long isbn;
+    @Positive
     private Double price;
     private String imgUrl;
-    private boolean available;
 
 
-    public BookDTO(Long id, String title, String author, Integer pages, Long isbn, Double price, String imgUrl, boolean available) {
+    public BookDTO(Long id, String title, String author, Integer pages, Long isbn, Double price, String imgUrl) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -26,7 +33,6 @@ public class BookDTO {
         this.isbn = isbn;
         this.price = price;
         this.imgUrl = imgUrl;
-        this.available = available;
     }
 
     public BookDTO(Book entity){
@@ -37,7 +43,6 @@ public class BookDTO {
         isbn = entity.getIsbn();
         price = entity.getPrice();
         imgUrl = entity.getImgUrl();
-        available = entity.isAvailable();
     }
 
     public Long getId() {
@@ -69,8 +74,5 @@ public class BookDTO {
     }
 
 
-    public boolean isAvailable() {
-        return available;
-    }
 
 }

@@ -1,11 +1,11 @@
-package com.libraryproject.library.resources.exceptions;
+package com.libraryproject.library.entities.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
 import java.time.Instant;
 
-public class StandardError implements Serializable {
+public class StandardErrorDTO implements Serializable {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT-03:00")
     private Instant timestamp;
@@ -14,10 +14,10 @@ public class StandardError implements Serializable {
     private String message;
     private String path;
 
-    public StandardError() {
+    public StandardErrorDTO() {
     }
 
-    public StandardError(Instant timestamp, Integer status, String error, String message, String path) {
+    public StandardErrorDTO(Instant timestamp, Integer status, String error, String message, String path) {
         this.timestamp = timestamp;
         this.status = status;
         this.error = error;
@@ -50,13 +50,6 @@ public class StandardError implements Serializable {
         this.error = error;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
     public String getPath() {
         return path;
@@ -64,5 +57,13 @@ public class StandardError implements Serializable {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

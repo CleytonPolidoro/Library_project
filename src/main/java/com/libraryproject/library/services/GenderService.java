@@ -4,6 +4,7 @@ import com.libraryproject.library.entities.Book;
 import com.libraryproject.library.entities.Gender;
 import com.libraryproject.library.entities.dto.GenderDTO;
 import com.libraryproject.library.repositories.GenderRepository;
+import com.libraryproject.library.services.exceptions.DatabaseException;
 import com.libraryproject.library.services.exceptions.UnprocessableException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,13 +31,14 @@ public class GenderService {
 
     @Transactional(readOnly = true)
     public GenderDTO findById(Long id){
-        Gender gender = repository.findById(id).get();
+
+        Gender gender = repository.findById(id).orElseThrow(() -> new DatabaseException("Resource not found. Id "+ id));
         return new GenderDTO(gender);
     }
 
     @Transactional
     public GenderDTO save(GenderDTO dto){
-        boolean genderExists = repository.findAll().stream().anyMatch(g -> g.getName() == dto.getName());
+        boolean genderExists = repository.findAll().stream().anyMatch(g -> g.getName().equalsIgnoreCase(dto.getName()));
 
         if(genderExists){
             throw new UnprocessableException("Gender already exists");
@@ -50,7 +53,6 @@ public class GenderService {
 
     private void copyDtoToEntity(GenderDTO dto, Gender entity) {
         entity.setName(dto.getName());
-        entity.setId(dto.getId());
     }
 }
 

@@ -17,4 +17,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT new com.libraryproject.library.entities.dto.UserDTO(obj.id, obj.username, obj.email, obj.phone) " +
             "FROM User obj")
     Page<UserDTO> searchAll(Pageable pageable);
+
+    Optional<User> findByUsernameContainingIgnoreCase(String name);
 }

@@ -7,6 +7,10 @@ import com.libraryproject.library.entities.dto.OrderItemDTO;
 import com.libraryproject.library.entities.projections.OrderItemProjection;
 import com.libraryproject.library.entities.projections.OrderProjection;
 import com.libraryproject.library.repositories.OrderRepository;
+import com.libraryproject.library.services.exceptions.DatabaseException;
+import com.libraryproject.library.services.exceptions.DateTimeException;
+import com.libraryproject.library.services.exceptions.ResourceNotFoundException;
+import com.libraryproject.library.services.exceptions.UnprocessableException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -17,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,18 +33,22 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public Page<OrderDTO> findBetween(Pageable pageable, String minDate, String maxDate){
-        LocalDate today = LocalDate.now();
+          try {
+              LocalDate today = LocalDate.now();
 
-        Instant max = maxDate.equals("") ? today.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()
-                : LocalDate.parse(maxDate).plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant();
+              Instant max = maxDate.equals("") ? today.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()
+                      : LocalDate.parse(maxDate).plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant();
 
-        Instant min = minDate.equals("")? today.minusWeeks(1).atStartOfDay(ZoneId.systemDefault()).toInstant()
-                : LocalDate.parse(minDate).atStartOfDay(ZoneId.systemDefault()).toInstant();
+              Instant min = minDate.equals("") ? today.minusWeeks(1).atStartOfDay(ZoneId.systemDefault()).toInstant()
+                      : LocalDate.parse(minDate).atStartOfDay(ZoneId.systemDefault()).toInstant();
 
-        Page<OrderProjection> page = repository.findOrdersBetweenDates(min, max, pageable);
-        List<OrderItemProjection> list = repository.findOrdersAndItems(page.map(x -> x.getId().intValue()).toList());
+              Page<OrderProjection> page = repository.findOrdersBetweenDates(min, max, pageable);
+              List<OrderItemProjection> list = repository.findOrdersAndItems(page.map(x -> x.getId().intValue()).toList());
 
-        return convertProjectionToDto(page, list);
+              return convertProjectionToDto(page, list);
+          } catch (DateTimeParseException e){
+              throw new DateTimeException("Use DD-MM-YYYY' format");
+          }
     }
 
 
@@ -54,7 +63,10 @@ public class OrderService {
     public OrderDTO findById(Long id){
         List<Integer> list = new ArrayList<>();
         list.add(id.intValue());
-        OrderProjection order = repository.searchById(id);
+
+        OrderProjection order = repository.searchById(id).orElseThrow(
+                ()-> new ResourceNotFoundException("Resource not found. Id "+id));
+
         List<OrderItemProjection> result = repository.findOrdersAndItems(list);
         OrderDTO dto = new OrderDTO(order);
         dto.getItems().addAll(result.stream().map(x -> new OrderItemDTO(x)).toList());

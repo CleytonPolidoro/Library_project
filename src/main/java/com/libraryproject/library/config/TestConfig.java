@@ -56,6 +56,7 @@ public class TestConfig implements CommandLineRunner {
                 () -> {
                     User user = new User();
                     user.setUsername("admin");
+                    user.setEmail("admin@admin.com");
                     user.setPassword(passwordEncoder.encode("123"));
                     user.setRoles(Set.of(roleAdmin));
                     userRepository.save(user);

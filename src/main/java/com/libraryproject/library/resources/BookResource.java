@@ -3,6 +3,7 @@ package com.libraryproject.library.resources;
 import com.libraryproject.library.entities.Book;
 import com.libraryproject.library.entities.dto.BookDTO;
 import com.libraryproject.library.services.BookService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,7 +41,7 @@ public class BookResource {
 
     @PostMapping()
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<BookDTO> save(@RequestBody BookDTO book){
+    public ResponseEntity<BookDTO> save(@Valid @RequestBody BookDTO book){
         BookDTO dto = service.insert(book);
         return ResponseEntity.ok().body(dto);
     }

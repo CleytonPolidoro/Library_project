@@ -12,9 +12,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -30,14 +32,8 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserDTO findById(Long id){
-        User user = repository.findById(id).orElseThrow(()-> new ResourceNotFoundException(id));
+        User user = repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Resource not found. Id "+id));
         return new UserDTO(user);
-    }
-
-    @Transactional(readOnly = true)
-    public UserDTO findByName(String name){
-        Optional<User> user = repository.findByUsername(name);
-        return new UserDTO(user.get());
     }
 
     @Transactional(readOnly = true)
@@ -46,9 +42,14 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO insert(UserDTO dto){
-        User user = new User();
-        copyDtoToEntity(dto, user);
+    public UserDTO insert(User user){
+
+        boolean emailExist = repository.findAll().stream().anyMatch(u -> u.getEmail().equalsIgnoreCase(user.getEmail()));;
+
+        if(emailExist){
+            throw new DatabaseException("Integrity violation. Email already registered.");
+        }
+
         User result = repository.save(user);
         return new UserDTO(result);
     }
@@ -56,7 +57,7 @@ public class UserService {
     public void deleteById(Long id){
         try {
             if(!repository.existsById(id)){
-                throw new ResourceNotFoundException(id);
+                throw new ResourceNotFoundException("Resource not found. Id "+ id);
             }
             repository.deleteById(id);
         } catch(DataIntegrityViolationException e){
@@ -72,7 +73,7 @@ public class UserService {
             entity = repository.save(entity);
             return new UserDTO(entity);
         } catch(EntityNotFoundException e){
-            throw new ResourceNotFoundException(id);
+            throw new ResourceNotFoundException("Resource not found. Id "+id);
         }
     }
 

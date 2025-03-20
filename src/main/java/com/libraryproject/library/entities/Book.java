@@ -22,7 +22,6 @@ public class Book implements Serializable {
     private Long isbn;
     private Double price;
     private String imgUrl;
-    private boolean available = true;
 
 
     @ManyToMany
@@ -114,14 +113,6 @@ public class Book implements Serializable {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
-    }
-
-    public boolean isAvailable() {
-        return available;
-    }
-
-    public void setAvailable(boolean available) {
-        this.available = available;
     }
 
     public Set<Gender> getGenders() {

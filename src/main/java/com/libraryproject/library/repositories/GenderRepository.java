@@ -15,4 +15,6 @@ public interface GenderRepository extends JpaRepository<Gender, Long> {
     List<Gender> searchAll(List<Gender> genders);
 
     Page<Gender> findByNameContainingIgnoreCase(Pageable pageable, String name);
+
+    Gender findByNameContainingIgnoreCase(String name);
 }

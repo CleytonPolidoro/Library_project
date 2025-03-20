@@ -1,12 +1,16 @@
 package com.libraryproject.library.entities.dto;
 
 import com.libraryproject.library.entities.Gender;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GenderDTO {
     private Long id;
+    @NotBlank(message = "Campo requerido")
+    @Size(min = 3, message = "Nome do genêro tem que ter no mínimo 3 caracteres")
     private String name;
 
     List<BookDTO> book;

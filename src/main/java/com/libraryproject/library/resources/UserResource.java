@@ -6,6 +6,7 @@ import com.libraryproject.library.entities.dto.CreateUserDTO;
 import com.libraryproject.library.entities.dto.UserDTO;
 import com.libraryproject.library.services.RoleService;
 import com.libraryproject.library.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +35,6 @@ public class UserResource {
     private final BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
 
 
-    @Transactional(readOnly = true)
     @GetMapping
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<Page<UserDTO>> findAll(Pageable pageable){
@@ -42,7 +42,7 @@ public class UserResource {
         return ResponseEntity.ok().body(page);
     }
 
-    @Transactional(readOnly = true)
+
     @GetMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<UserDTO> findById(@PathVariable Long id){
@@ -50,16 +50,16 @@ public class UserResource {
         return ResponseEntity.ok().body(dto);
     }
 
-    @Transactional
-    @PostMapping
-    public ResponseEntity<CreateUserDTO> save(@RequestBody CreateUserDTO dto){
+
+    @PostMapping()
+    public ResponseEntity<UserDTO> save(@RequestBody @Valid CreateUserDTO dto){
 
 
         User user = new User();
 
         Role basicRole = roleService.findByName(Role.Values.BASIC.name());
         Set<Role> roles = new HashSet<>();
-        user.setUsername(dto.username());
+        user.setUsername(dto.name());
         user.setEmail(dto.email());
         user.setPhone(dto.phone());
         roles.add(basicRole);
@@ -68,11 +68,11 @@ public class UserResource {
 
         UserDTO userDto = new UserDTO(user);
 
-        service.insert(userDto);
+        service.insert(user);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(userDto.getId()).toUri();
 
 
-        return ResponseEntity.created(uri).body(dto);
+        return ResponseEntity.created(uri).body(userDto);
     }
 
     @DeleteMapping(value = "/{id}")

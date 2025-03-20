@@ -1,8 +1,8 @@
 package com.libraryproject.library.resources;
 
-import com.libraryproject.library.entities.Gender;
 import com.libraryproject.library.entities.dto.GenderDTO;
 import com.libraryproject.library.services.GenderService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,9 +34,9 @@ public class GenderResource {
 
     @PostMapping()
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<GenderDTO> create(@RequestBody GenderDTO dto){
-        service.save(dto);
-        return ResponseEntity.ok().body(dto);
+    public ResponseEntity<GenderDTO> save(@RequestBody @Valid GenderDTO dto){
+        GenderDTO result = service.save(dto);
+        return ResponseEntity.ok().body(result);
     }
 
 }
