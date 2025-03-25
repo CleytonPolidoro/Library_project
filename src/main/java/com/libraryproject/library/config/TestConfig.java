@@ -47,15 +47,15 @@ public class TestConfig implements CommandLineRunner {
         Role role1 = new Role(Role.Values.ADMIN.name());
         Role role2 = new Role(Role.Values.BASIC.name());
         roleRepository.saveAll(Arrays.asList(role1, role2));
-        var roleAdmin = roleRepository.findByName(Role.Values.ADMIN.name());
+        var roleAdmin = roleRepository.findByAuthority(Role.Values.ADMIN.name());
 
-        var userAdmin = userRepository.findByUsername("admin");
+        var userAdmin = userRepository.findByName("admin");
 
         userAdmin.ifPresentOrElse(
                 user -> System.out.print("Usuário já cadastrado"),
                 () -> {
                     User user = new User();
-                    user.setUsername("admin");
+                    user.setName("admin");
                     user.setEmail("admin@admin.com");
                     user.setPassword(passwordEncoder.encode("123"));
                     user.setRoles(Set.of(roleAdmin));

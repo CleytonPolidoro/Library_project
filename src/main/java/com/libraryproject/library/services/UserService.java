@@ -38,7 +38,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Optional<User> findUsernameForToken(String username){
-        return repository.findByUsername(username);
+        return repository.findByEmail(username);
     }
 
     @Transactional
@@ -78,7 +78,7 @@ public class UserService {
     }
 
     public void copyDtoToEntity(UserDTO dto, User entity) {
-        entity.setUsername(dto.getName());
+        entity.setName(dto.getName());
         entity.setEmail(dto.getEmail());
         entity.setPhone(dto.getPhone());
         entity.setId(dto.getId());

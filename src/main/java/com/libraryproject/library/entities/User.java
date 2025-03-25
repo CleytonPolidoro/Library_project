@@ -3,21 +3,25 @@ package com.libraryproject.library.entities;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.libraryproject.library.entities.dto.LoginRequestDTO;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
 @JsonDeserialize(as = Client.class)
-public class User implements Serializable {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String username;
+    private String name;
     private String email;
     private String password;
     private String phone;
@@ -32,9 +36,9 @@ public class User implements Serializable {
 
     public User(){};
 
-    public User(Long id, String username, String email, String password, String phone) {
+    public User(Long id, String name, String email, String password, String phone) {
         this.id = id;
-        this.username = username;
+        this.name = name;
         this.email = email;
         this.password = password;
         this.phone = phone;
@@ -48,12 +52,37 @@ public class User implements Serializable {
         this.id = id;
     }
 
+    @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getEmail() {
@@ -62,6 +91,11 @@ public class User implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
     }
 
     public String getPassword() {
@@ -104,4 +138,5 @@ public class User implements Serializable {
     public boolean isLoginCorrect(LoginRequestDTO loginRequestDTO, PasswordEncoder passwordEncoder) {
         return passwordEncoder.matches(loginRequestDTO.password(), this.password);
     }
+
 }

@@ -37,7 +37,7 @@ public class TokenResource {
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO) {
 
-        var user = service.findUsernameForToken(loginRequestDTO.username());
+        var user = service.findUsernameForToken(loginRequestDTO.email());
 
         if(user.isEmpty() || !user.get().isLoginCorrect(loginRequestDTO, passwordEncoder)){
           throw new BadCredentialsException("Invalid username or password!");
@@ -46,7 +46,7 @@ public class TokenResource {
         var now = Instant.now();
         var expiresIn = 300L;
         var scopes = user.get().getRoles().stream().
-                map(Role::getName).collect(Collectors.joining(" "));
+                map(Role::getAuthority).collect(Collectors.joining(" "));
 
         var claims = JwtClaimsSet.builder()
                 .issuer("mybackend")

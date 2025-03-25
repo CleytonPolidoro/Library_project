@@ -1,33 +1,35 @@
 package com.libraryproject.library.entities;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Set;
 
 @Entity
 @Table(name="roles")
-public class Role {
+public class Role implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
     private Long id;
-    private String name;
+    private String authority;
 
     public Role() {
         
     }
 
-    public Role(String name) {
-        this.name = name;
+    public Role(String authority) {
+        this.authority = authority;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public String getAuthority() {
+        return authority;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String authority) {
+        this.authority = authority;
     }
 
     public Long getId() {
@@ -40,7 +42,7 @@ public class Role {
 
     public Role(Long id, String name) {
         this.id = id;
-        this.name = name;
+        this.authority = authority;
     }
 
     public enum Values{

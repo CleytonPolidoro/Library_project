@@ -23,7 +23,7 @@ public class RoleService {
         return repository.findById(id).get();
     }
 
-    public Role findByName(String name){
-        return repository.findByName(name);
+    public Role findByAuthority(String authority){
+        return repository.findByAuthority(authority);
     }
 }

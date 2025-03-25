@@ -57,9 +57,9 @@ public class UserResource {
 
         User user = new User();
 
-        Role basicRole = roleService.findByName(Role.Values.BASIC.name());
+        Role basicRole = roleService.findByAuthority(Role.Values.BASIC.name());
         Set<Role> roles = new HashSet<>();
-        user.setUsername(dto.name());
+        user.setName(dto.name());
         user.setEmail(dto.email());
         user.setPhone(dto.phone());
         roles.add(basicRole);
