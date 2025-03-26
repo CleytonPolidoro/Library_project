@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "security.client-secret",
+      "type": "java.lang.String",
+      "description": "Description for security.client-secret."
+    },
+    {
+      "name": "security.client-id",
+      "type": "java.lang.String",
+      "description": "Description for security.client-id."
+    }
+  ] }
