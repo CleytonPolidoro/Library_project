@@ -45,7 +45,7 @@ public class TestConfig implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         Role role1 = new Role(Role.Values.ADMIN.name());
-        Role role2 = new Role(Role.Values.BASIC.name());
+        Role role2 = new Role(Role.Values.CLIENT.name());
         roleRepository.saveAll(Arrays.asList(role1, role2));
         var roleAdmin = roleRepository.findByAuthority(Role.Values.ADMIN.name());
 
@@ -58,7 +58,7 @@ public class TestConfig implements CommandLineRunner {
                     user.setName("admin");
                     user.setEmail("admin@admin.com");
                     user.setPassword(passwordEncoder.encode("123"));
-                    user.setRoles(Set.of(roleAdmin));
+                    user.addRoles(Set.of(roleAdmin));
                     userRepository.save(user);
                 }
 

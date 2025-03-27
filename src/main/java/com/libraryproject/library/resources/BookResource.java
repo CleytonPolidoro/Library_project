@@ -26,6 +26,7 @@ public class BookResource {
         return ResponseEntity.ok().body(list);
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<BookDTO> findById(@PathVariable Long id){
         BookDTO book = service.findById(id);

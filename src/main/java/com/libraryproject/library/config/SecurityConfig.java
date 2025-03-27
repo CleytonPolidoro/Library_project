@@ -47,12 +47,7 @@ public class SecurityConfig {
 
         http
                 .authorizeRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                        .requestMatchers("/genders/**").permitAll()
-                        .requestMatchers ( "/books/**").permitAll()
-                        .requestMatchers ( "/h2-console/**" ). permitAll ()
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())
                 .headers ( headers -> headers. frameOptions (HeadersConfigurer. FrameOptionsConfig::disable))
                 .csrf(csrf -> csrf.disable())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
@@ -67,7 +62,7 @@ public class SecurityConfig {
             OAuth2ClientAuthenticationToken principal = context.getPrincipal();
             CustomUserAuthorities user = (CustomUserAuthorities) principal.getDetails();
             List<String> authorities = user.getAuthorities().stream().map(x -> x.getAuthority()).toList();
-            if(context.getTokenType().getValue().equals("acess_token")){
+            if(context.getTokenType().getValue().equals("access_token")){
                 context.getClaims()
                         .claim("authorities", authorities)
                         .claim("username", user.getUsername());

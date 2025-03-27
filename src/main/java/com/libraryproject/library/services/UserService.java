@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -75,6 +78,22 @@ public class UserService {
         } catch(EntityNotFoundException e){
             throw new ResourceNotFoundException("Resource not found. Id "+id);
         }
+    }
+
+    protected Optional<User> authenticated(){
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Jwt principal = (Jwt) authentication.getPrincipal();
+            String username = principal.getClaim("username");
+            return repository.findByEmail(username);
+        }catch(Exception e){
+            throw new ResourceNotFoundException("Email not found");
+        }
+    }
+    @Transactional(readOnly = true)
+    public UserDTO getMe(){
+        User user = authenticated().get();
+        return new UserDTO(user);
     }
 
     public void copyDtoToEntity(UserDTO dto, User entity) {
