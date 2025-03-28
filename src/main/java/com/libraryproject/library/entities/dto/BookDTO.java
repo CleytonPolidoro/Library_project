@@ -20,7 +20,8 @@ public class BookDTO {
     @NotNull
     private Integer pages;
     private Long isbn;
-    @Positive
+    @NotNull(message = "Campo requerido")
+    @Positive(message = "O valor tem que ser positivo")
     private Double price;
     private String imgUrl;
 
