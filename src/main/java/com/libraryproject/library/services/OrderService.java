@@ -31,6 +31,9 @@ public class OrderService {
     @Autowired
     private OrderRepository repository;
 
+    @Autowired
+    private AuthService authService;
+
     @Transactional(readOnly = true)
     public Page<OrderDTO> findBetween(Pageable pageable, String minDate, String maxDate){
           try {
@@ -70,6 +73,9 @@ public class OrderService {
         List<OrderItemProjection> result = repository.findOrdersAndItems(list);
         OrderDTO dto = new OrderDTO(order);
         dto.getItems().addAll(result.stream().map(x -> new OrderItemDTO(x)).toList());
+
+        authService.validateSelfOrAdmin(order.getClientId());
+
         return dto;
     }
 

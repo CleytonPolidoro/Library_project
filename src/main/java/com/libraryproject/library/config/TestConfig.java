@@ -47,7 +47,8 @@ public class TestConfig implements CommandLineRunner {
         Role role1 = new Role(Role.Values.ADMIN.name());
         Role role2 = new Role(Role.Values.CLIENT.name());
         roleRepository.saveAll(Arrays.asList(role1, role2));
-        var roleAdmin = roleRepository.findByAuthority(Role.Values.ADMIN.name());
+        Role roleAdmin = roleRepository.findByAuthority(Role.Values.ADMIN.name());
+        Role roleClient = roleRepository.findByAuthority(Role.Values.CLIENT.name());
 
         var userAdmin = userRepository.findByName("admin");
 
@@ -64,10 +65,12 @@ public class TestConfig implements CommandLineRunner {
 
         );
 
-        Client client1 = new Client(null, "Maria Brown", "maria@gmail.com", "123456", "988888888");
-        Client client2 = new Client(null, "Alex Green", "alex@gmail.com", "123456", "977777777");
+        User client1 = new User(null, "Maria Brown", "maria@gmail.com", passwordEncoder.encode("123456"), "988888888");
+        User client2 = new User(null, "Alex Green", "alex@gmail.com", passwordEncoder.encode("123456"), "977777777");
+        client1.addRoles(Set.of(roleClient));
+        client2.addRoles(Set.of(roleClient));
 
-        userRepository.saveAll(Arrays.asList(client1, client2));
+//        userRepository.saveAll(Arrays.asList(client1, client2));
 
         Order o1 = new Order(null, Instant.parse("2024-10-11T19:53:07Z"), client1, OrderStatus.valueOf(2));
 

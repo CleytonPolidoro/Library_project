@@ -1,5 +1,6 @@
 package com.libraryproject.library.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.libraryproject.library.entities.dto.LoginRequestDTO;
 import jakarta.persistence.*;
@@ -8,10 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -34,6 +32,11 @@ public class User implements UserDetails {
     )
     private Set<Role> roles;
 
+
+    @OneToMany(mappedBy = "client")
+    @JsonIgnore
+    private List<Order> orders = new ArrayList<>();
+
     public User(){};
 
     public User(Long id, String name, String email, String password, String phone) {
@@ -50,6 +53,11 @@ public class User implements UserDetails {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<Order> getOrders() {
+
+        return orders;
     }
 
     @Override

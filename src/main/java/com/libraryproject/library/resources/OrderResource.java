@@ -32,7 +32,7 @@ public class OrderResource {
         return ResponseEntity.ok().body(page);
     }
 
-    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN', 'SCOPE_CLIENT')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<OrderDTO> findById(@PathVariable Long id){
         OrderDTO order = service.findById(id);

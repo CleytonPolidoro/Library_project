@@ -3,10 +3,7 @@ package com.libraryproject.library.resources.exceptions;
 import com.libraryproject.library.entities.dto.FieldMessageDTO;
 import com.libraryproject.library.entities.dto.StandardErrorDTO;
 import com.libraryproject.library.entities.dto.ValidationErrorDTO;
-import com.libraryproject.library.services.exceptions.DatabaseException;
-import com.libraryproject.library.services.exceptions.DateTimeException;
-import com.libraryproject.library.services.exceptions.ResourceNotFoundException;
-import com.libraryproject.library.services.exceptions.UnprocessableException;
+import com.libraryproject.library.services.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,6 +58,14 @@ public class ResourceExceptionHandler {
     public ResponseEntity<StandardErrorDTO> dateTime(DateTimeException e, HttpServletRequest request){
         String error = "Incorrect date";
         HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
+        StandardErrorDTO err = new StandardErrorDTO(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<StandardErrorDTO> Forbidden(ForbiddenException e, HttpServletRequest request){
+        String error = "Unauthorized user";
+        HttpStatus status = HttpStatus.FORBIDDEN;
         StandardErrorDTO err = new StandardErrorDTO(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
