@@ -3,6 +3,7 @@ package com.libraryproject.library.services;
 import com.libraryproject.library.entities.Book;
 import com.libraryproject.library.entities.Gender;
 import com.libraryproject.library.entities.dto.BookDTO;
+import com.libraryproject.library.entities.dto.BookMinDTO;
 import com.libraryproject.library.entities.dto.GenderDTO;
 import com.libraryproject.library.repositories.BookRepository;
 import com.libraryproject.library.services.exceptions.ResourceNotFoundException;
@@ -25,9 +26,9 @@ public class BookService {
     private BookRepository repository;
 
     @Transactional(readOnly = true)
-    public Page<BookDTO> findAll(Pageable pageable, String title){
+    public Page<BookMinDTO> findAll(Pageable pageable, String title){
         Page<Book> result = repository.searchAll(pageable, title);
-        return result.map(x -> new BookDTO(x));
+        return result.map(x -> new BookMinDTO(x));
     }
 
     @Transactional(readOnly = true)
@@ -37,13 +38,13 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
-    public Page<BookDTO> findByAuthor(Pageable pageable ,String author){
+    public Page<BookMinDTO> findByAuthor(Pageable pageable ,String author){
 
             Page<Book> result = repository.searchByAuthor(pageable, author);
             if(result.getContent().isEmpty()){
                 throw new ResourceNotFoundException("Resource not found with author " + author);
             }
-            return result.map(x -> new BookDTO(x));
+            return result.map(x -> new BookMinDTO(x));
     }
 
 
@@ -72,5 +73,12 @@ public class BookService {
         entity.setImgUrl(dto.getImgUrl());
         entity.setPages(dto.getPages());
 
+        entity.getGenders().clear();
+        for(GenderDTO genDto : dto.getGenders()){
+            Gender gender = new Gender();
+            gender.setId(genDto.getId());
+            gender.setName(genDto.getName());
+            entity.addGender(gender);
+        }
     }
 }

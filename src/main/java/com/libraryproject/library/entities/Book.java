@@ -119,6 +119,10 @@ public class Book implements Serializable {
         return genders;
     }
 
+    public void addGender(Gender gender){
+        genders.add(gender);
+    }
+
     public Set<OrderItem> getItems(){
         return items;
     }

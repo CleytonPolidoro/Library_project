@@ -13,9 +13,9 @@ public class GenderDTO {
     @Size(min = 3, message = "Nome do genêro tem que ter no mínimo 3 caracteres")
     private String name;
 
-    List<BookDTO> book;
+    List<BookMinDTO> book;
 
-    public GenderDTO(Long id, String name, List<BookDTO> books) {
+    public GenderDTO(Long id, String name, List<BookMinDTO> books) {
         this.id = id;
         this.name = name;
         this.book = books;
@@ -24,7 +24,7 @@ public class GenderDTO {
     public GenderDTO(Gender entity){
         id=entity.getId();
         name=entity.getName();
-        book=entity.getBook().stream().map(x -> new BookDTO(x)).toList();
+        book=entity.getBook().stream().map(x -> new BookMinDTO(x)).toList();
     }
 
     public Long getId() {
@@ -35,7 +35,7 @@ public class GenderDTO {
         return name;
     }
 
-    public List<BookDTO> getBook() {
+    public List<BookMinDTO> getBook() {
         return book;
     }
 }

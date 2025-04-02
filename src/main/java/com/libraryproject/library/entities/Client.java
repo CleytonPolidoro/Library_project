@@ -1,11 +1,6 @@
 package com.libraryproject.library.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Client extends User {

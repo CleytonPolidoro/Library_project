@@ -2,6 +2,7 @@ package com.libraryproject.library.resources;
 
 import com.libraryproject.library.entities.Book;
 import com.libraryproject.library.entities.dto.BookDTO;
+import com.libraryproject.library.entities.dto.BookMinDTO;
 import com.libraryproject.library.services.BookService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,8 @@ public class BookResource {
     private BookService service;
 
     @GetMapping
-    public ResponseEntity<Page<BookDTO>> findAll(Pageable pageable, @RequestParam(name = "title", defaultValue = "") String title){
-        Page<BookDTO> list = service.findAll(pageable, title);
+    public ResponseEntity<Page<BookMinDTO>> findAll(Pageable pageable, @RequestParam(name = "title", defaultValue = "") String title){
+        Page<BookMinDTO> list = service.findAll(pageable, title);
         return ResponseEntity.ok().body(list);
     }
 
@@ -34,8 +35,8 @@ public class BookResource {
     }
 
     @GetMapping(value = "/author")
-    public ResponseEntity<Page<BookDTO>> findByAuthor(Pageable pageable, @RequestParam(name = "author", defaultValue = "") String author){
-        Page<BookDTO> list = service.findByAuthor(pageable, author);
+    public ResponseEntity<Page<BookMinDTO>> findByAuthor(Pageable pageable, @RequestParam(name = "author", defaultValue = "") String author){
+        Page<BookMinDTO> list = service.findByAuthor(pageable, author);
         return ResponseEntity.ok().body(list);
     }
 
