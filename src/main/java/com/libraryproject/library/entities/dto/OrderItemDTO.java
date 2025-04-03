@@ -6,9 +6,9 @@ import com.libraryproject.library.entities.projections.OrderItemProjection;
 
 public class OrderItemDTO {
     private Integer quantity;
-    private Double price;
     private String book;
     private String author;
+    private Double price;
 
     public OrderItemDTO(OrderItemProjection projection) {
         quantity = projection.getQuantity();
@@ -37,6 +37,10 @@ public class OrderItemDTO {
     }
     public String getAuthor() {
         return author;
+    }
+
+    public Double getSubTotal(){
+        return price*quantity;
     }
 
     @Override

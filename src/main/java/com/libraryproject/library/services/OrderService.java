@@ -4,6 +4,7 @@ import com.libraryproject.library.entities.Order;
 import com.libraryproject.library.entities.OrderItem;
 import com.libraryproject.library.entities.dto.OrderDTO;
 import com.libraryproject.library.entities.dto.OrderItemDTO;
+import com.libraryproject.library.entities.dto.OrderMinDTO;
 import com.libraryproject.library.entities.projections.OrderItemProjection;
 import com.libraryproject.library.entities.projections.OrderProjection;
 import com.libraryproject.library.repositories.OrderRepository;
@@ -35,7 +36,7 @@ public class OrderService {
     private AuthService authService;
 
     @Transactional(readOnly = true)
-    public Page<OrderDTO> findBetween(Pageable pageable, String minDate, String maxDate){
+    public Page<OrderMinDTO> findBetween(Pageable pageable, String minDate, String maxDate){
           try {
               LocalDate today = LocalDate.now();
 
@@ -56,7 +57,7 @@ public class OrderService {
 
 
     @Transactional(readOnly = true)
-    public Page<OrderDTO> findAll(Pageable pageable){
+    public Page<OrderMinDTO> findAll(Pageable pageable){
         Page<OrderProjection> page = repository.searchAll(pageable);
         List<OrderItemProjection> list = repository.findOrdersAndItems(page.map(x -> x.getId().intValue()).toList());
         return convertProjectionToDto(page, list);
@@ -67,33 +68,33 @@ public class OrderService {
         List<Integer> list = new ArrayList<>();
         list.add(id.intValue());
 
-        OrderProjection order = repository.searchById(id).orElseThrow(
+        Order order = repository.findById(id).orElseThrow(
                 ()-> new ResourceNotFoundException("Resource not found. Id "+id));
 
         List<OrderItemProjection> result = repository.findOrdersAndItems(list);
         OrderDTO dto = new OrderDTO(order);
         dto.getItems().addAll(result.stream().map(x -> new OrderItemDTO(x)).toList());
 
-        authService.validateSelfOrAdmin(order.getClientId());
+//        authService.validateSelfOrAdmin(order.getClientId());
 
         return dto;
     }
 
-    private Page<OrderDTO> convertProjectionToDto(Page<OrderProjection> page, List<OrderItemProjection> list){
-        List<OrderDTO> page3 = new ArrayList<OrderDTO>();
+    private Page<OrderMinDTO> convertProjectionToDto(Page<OrderProjection> page, List<OrderItemProjection> list){
+        List<OrderMinDTO> page3 = new ArrayList<>();
 
         for(OrderProjection order : page){
             for (OrderItemProjection items : list){
                 if(order.getId().equals(items.getOrderId())){
-                    page3.add(new OrderDTO(order.getId(), order.getClientId(), order.getMoment(), order.getStatus(), items));
+                    page3.add(new OrderMinDTO(order.getId(), order.getClientId(), order.getMoment(), order.getStatus(), items));
                 }
             }
         }
 
-        Page<OrderDTO> page4 = page.map(x -> new OrderDTO(x));
+        Page<OrderMinDTO> page4 = page.map(x -> new OrderMinDTO(x));
 
-        for(OrderDTO order : page4){
-            for(OrderDTO dto : page3){
+        for(OrderMinDTO order : page4){
+            for(OrderMinDTO dto : page3){
                 if(order.getId().equals(dto.getId())){
                     order.getItems().addAll(dto.getItems());
                 }

@@ -14,39 +14,30 @@ import java.util.Set;
 
 public class OrderDTO {
     private Long id;
-    private Long clientId;
     private Instant moment;
-    private Integer status;
+    private OrderStatus status;
+
+    private ClientDTO client;
+    private PaymentDTO payment;
 
     private List<OrderItemDTO> items = new ArrayList<>();
 
-    public OrderDTO(Long id, Long clientId, Instant moment, Integer status, OrderItemProjection items) {
+    public OrderDTO(Long id, Instant moment, OrderStatus status, ClientDTO client, PaymentDTO payment) {
         this.id = id;
         this.moment = moment;
         this.status = status;
-        this.clientId = clientId;
-        this.items.add(new OrderItemDTO(items));
-    }
-    public OrderDTO(Long id, Long clientId, Instant moment, Integer status, Set <OrderItem> items) {
-        this.id = id;
-        this.moment = moment;
-        this.status = status;
-        this.clientId = clientId;
-        this.items = items.stream().map(x -> new OrderItemDTO(x)).toList();
+        this.client = client;
+        this.payment = payment;
     }
 
-    public OrderDTO(OrderProjection proj){
-        id = proj.getId();
-        moment = proj.getMoment();
-        clientId = proj.getClientId();
-        status = proj.getStatus();
-    }
 
     public OrderDTO(Order entity) {
         id = entity.getId();
         moment = entity.getMoment();
-        status = entity.getStatus().getCode();
-        items = entity.getItems().stream().map(x-> new OrderItemDTO(x)).toList();
+        status = entity.getStatus();
+        client = new ClientDTO(entity.getClient());
+        payment = (entity.getPayment() == null) ? null : new PaymentDTO(entity.getPayment());
+        entity.getItems().forEach(item -> items.add(new OrderItemDTO(item)));
     }
 
     public Long getId() {
@@ -57,30 +48,34 @@ public class OrderDTO {
         return moment;
     }
 
-    public void setMoment(Instant moment) {
-        this.moment = moment;
+    public OrderStatus getStatus() {
+        return status;
     }
 
-    public OrderStatus getStatus() {
-        return OrderStatus.valueOf(status);
+    public ClientDTO getClient() {
+        return client;
+    }
+
+    public PaymentDTO getPayment() {
+        return payment;
     }
 
     public void setStatus(OrderStatus status) {
         if(status != null){
-            this.status = status.getCode();
+            this.status = status;
         };
+    }
+
+    public Double getTotal(){
+        double sum = 0.0;
+        for(OrderItemDTO item : items){
+            sum += item.getSubTotal();
+        }
+        return sum;
     }
 
     public List<OrderItemDTO> getItems() {
         return items;
     }
 
-    public Long getClientId() {
-        return clientId;
-    }
-
-    //
-//    public UserDTO getUser() {
-//        return user;
-//    }
 }

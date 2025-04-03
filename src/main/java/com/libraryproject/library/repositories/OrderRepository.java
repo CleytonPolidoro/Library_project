@@ -32,7 +32,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "FROM orders " +
             "WHERE orders.id = :id"
     )
-    Optional    <OrderProjection> searchById(Long id);
+    Optional <OrderProjection> searchById(Long id);
 
     @Query(nativeQuery = true, value =
             "SELECT DISTINCT orders.status, orders.client_id, orders.id, orders.moment " +
