@@ -9,7 +9,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -38,8 +40,10 @@ public class GenderResource {
     @PostMapping()
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<GenderDTO> save(@RequestBody @Valid GenderDTO dto){
-        GenderDTO result = service.save(dto);
-        return ResponseEntity.ok().body(result);
+        dto = service.save(dto);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(dto.getId()).toUri();
+        return ResponseEntity.created(uri).body(dto);
     }
 
 }

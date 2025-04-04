@@ -21,7 +21,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "FROM orders")
     Page<OrderProjection> searchAll(Pageable pageable);
 
-    @Query(nativeQuery = true, value = "SELECT order_item.order_id, order_item.price, order_item.quantity, Books.title, Books.author " +
+    @Query(nativeQuery = true, value = "SELECT order_item.order_id, order_item.price, order_item.quantity, Books.id, Books.author " +
             "FROM order_item " +
             "INNER JOIN Books ON Books.id = order_item.book_id " +
             "WHERE order_item.order_id IN :list")

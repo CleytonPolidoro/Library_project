@@ -1,12 +1,18 @@
 package com.libraryproject.library.services;
 
+import com.libraryproject.library.entities.Book;
 import com.libraryproject.library.entities.Order;
 import com.libraryproject.library.entities.OrderItem;
+import com.libraryproject.library.entities.User;
+import com.libraryproject.library.entities.dto.ClientDTO;
 import com.libraryproject.library.entities.dto.OrderDTO;
 import com.libraryproject.library.entities.dto.OrderItemDTO;
 import com.libraryproject.library.entities.dto.OrderMinDTO;
+import com.libraryproject.library.entities.enums.OrderStatus;
 import com.libraryproject.library.entities.projections.OrderItemProjection;
 import com.libraryproject.library.entities.projections.OrderProjection;
+import com.libraryproject.library.repositories.BookRepository;
+import com.libraryproject.library.repositories.OrderItemRepository;
 import com.libraryproject.library.repositories.OrderRepository;
 import com.libraryproject.library.services.exceptions.DatabaseException;
 import com.libraryproject.library.services.exceptions.DateTimeException;
@@ -34,6 +40,15 @@ public class OrderService {
 
     @Autowired
     private AuthService authService;
+
+    @Autowired
+    private OrderItemRepository itemRepository;
+
+    @Autowired
+    private BookRepository bookRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Transactional(readOnly = true)
     public Page<OrderMinDTO> findBetween(Pageable pageable, String minDate, String maxDate){
@@ -73,12 +88,33 @@ public class OrderService {
 
         List<OrderItemProjection> result = repository.findOrdersAndItems(list);
         OrderDTO dto = new OrderDTO(order);
-        dto.getItems().addAll(result.stream().map(x -> new OrderItemDTO(x)).toList());
+//        dto.getItems().addAll(result.stream().map(x -> new OrderItemDTO(x)).toList());
 
 //        authService.validateSelfOrAdmin(order.getClientId());
 
         return dto;
     }
+
+    @Transactional
+    public OrderDTO insert(OrderDTO dto){
+        Order order = new Order();
+        order.setMoment(Instant.now());
+        order.setStatus(OrderStatus.WAITING_PAYMENT);
+
+        User user = userService.authenticated().get();
+        order.setClient(user);
+
+        for (OrderItemDTO item : dto.getItems()) {
+            Book book = bookRepository.getReferenceById(item.getBookId());
+            OrderItem orderItem = new OrderItem(order, book, item.getQuantity(), book.getPrice());
+            order.getItems().add(orderItem);
+        }
+
+        repository.save(order);
+        itemRepository.saveAll(order.getItems());
+        return new OrderDTO(order);
+    }
+
 
     private Page<OrderMinDTO> convertProjectionToDto(Page<OrderProjection> page, List<OrderItemProjection> list){
         List<OrderMinDTO> page3 = new ArrayList<>();

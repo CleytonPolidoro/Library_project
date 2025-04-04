@@ -6,6 +6,7 @@ import com.libraryproject.library.entities.User;
 import com.libraryproject.library.entities.enums.OrderStatus;
 import com.libraryproject.library.entities.projections.OrderItemProjection;
 import com.libraryproject.library.entities.projections.OrderProjection;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class OrderDTO {
     private ClientDTO client;
     private PaymentDTO payment;
 
+    @NotEmpty(message = "Deve ter no mínimo um item")
     private List<OrderItemDTO> items = new ArrayList<>();
 
     public OrderDTO(Long id, Instant moment, OrderStatus status, ClientDTO client, PaymentDTO payment) {

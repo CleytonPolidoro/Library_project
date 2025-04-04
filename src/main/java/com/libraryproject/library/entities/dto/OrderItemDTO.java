@@ -6,19 +6,26 @@ import com.libraryproject.library.entities.projections.OrderItemProjection;
 
 public class OrderItemDTO {
     private Integer quantity;
-    private String book;
+    private Long bookId;
     private String author;
     private Double price;
+
+    public OrderItemDTO(Integer quantity, Long bookId, String author, Double price) {
+        this.quantity = quantity;
+        this.bookId = bookId;
+        this.author = author;
+        this.price = price;
+    }
 
     public OrderItemDTO(OrderItemProjection projection) {
         quantity = projection.getQuantity();
         price = projection.getPrice();
-        book = projection.getTitle();
+        bookId = projection.getBookId();
         author = projection.getAuthor();
     }
 
     public OrderItemDTO(OrderItem entity) {
-        book = entity.getId().getBook().getTitle();
+        bookId = entity.getId().getBook().getId();
         author = entity.getId().getBook().getAuthor();
         quantity = entity.getQuantity();
         price = entity.getPrice();
@@ -32,8 +39,8 @@ public class OrderItemDTO {
         return price;
     }
 
-    public String getBook() {
-        return book;
+    public Long getBookId() {
+        return bookId;
     }
     public String getAuthor() {
         return author;
@@ -46,6 +53,6 @@ public class OrderItemDTO {
     @Override
     public String toString() {
 
-        return String.format("book: " + book+ "\nauthor: " + author + "\nprice: " + price + "\nquantity: " + quantity);
+        return String.format("book: " + bookId+ "\nauthor: " + author + "\nprice: " + price + "\nquantity: " + quantity);
     }
 }

@@ -7,6 +7,6 @@ public interface OrderItemProjection {
     Double getPrice();
     Integer getQuantity();
     Long getOrderId();
-    String getTitle();
+    Long getBookId();
     String getAuthor();
 }
