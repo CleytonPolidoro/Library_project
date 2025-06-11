@@ -19,7 +19,7 @@ public class BookDTO {
     private String author;
     @NotNull
     private Integer pages;
-    private Long isbn;
+    private String isbn;
     @NotNull(message = "Campo requerido")
     @Positive(message = "O valor tem que ser positivo")
     private Double price;
@@ -29,7 +29,7 @@ public class BookDTO {
     private List<GenderDTO> genders = new ArrayList<>();
 
 
-    public BookDTO(Long id, String title, String author, Integer pages, Long isbn, Double price, String imgUrl, List<GenderDTO> genders) {
+    public BookDTO(Long id, String title, String author, Integer pages, String isbn, Double price, String imgUrl, List<GenderDTO> genders) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -67,7 +67,7 @@ public class BookDTO {
         return pages;
     }
 
-    public Long getIsbn() {
+    public String getIsbn() {
         return isbn;
     }
 

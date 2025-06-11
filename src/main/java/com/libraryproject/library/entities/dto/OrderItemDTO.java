@@ -1,7 +1,6 @@
 package com.libraryproject.library.entities.dto;
 
 import com.libraryproject.library.entities.OrderItem;
-import com.libraryproject.library.entities.pk.OrderItemPK;
 import com.libraryproject.library.entities.projections.OrderItemProjection;
 
 public class OrderItemDTO {

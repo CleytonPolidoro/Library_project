@@ -4,7 +4,6 @@ import com.libraryproject.library.entities.Gender;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GenderDTO {

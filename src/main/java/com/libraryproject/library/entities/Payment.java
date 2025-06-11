@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 @Entity
+@Table(name = "payment")
 public class Payment {
 
     @Id

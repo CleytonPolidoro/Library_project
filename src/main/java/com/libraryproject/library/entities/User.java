@@ -1,19 +1,16 @@
 package com.libraryproject.library.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.libraryproject.library.entities.dto.LoginRequestDTO;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.io.Serializable;
 import java.util.*;
 
 @Entity
-@Table(name = "users")
-@JsonDeserialize(as = Client.class)
+@Table(name = "tb_user")
 public class User implements UserDetails {
 
     @Id
@@ -24,7 +21,7 @@ public class User implements UserDetails {
     private String password;
     private String phone;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
             name = "tb_users_roles",
             joinColumns = @JoinColumn(name = "user_id"),

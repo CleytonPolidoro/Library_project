@@ -6,8 +6,10 @@ import com.libraryproject.library.entities.dto.BookDTO;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "books")
@@ -19,7 +21,7 @@ public class Book implements Serializable {
     private String title;
     private String author;
     private Integer pages;
-    private Long isbn;
+    private String isbn;
     private Double price;
     private String imgUrl;
 
@@ -38,7 +40,7 @@ public class Book implements Serializable {
     public Book() {}
 
     public Book(Long id, String title, String author, Integer pages,
-                Long isbn, Double price, String imgUrl, Gender gender) {
+                String isbn, Double price, String imgUrl, Gender gender) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -91,11 +93,11 @@ public class Book implements Serializable {
         this.pages = pages;
     }
 
-    public Long getIsbn() {
+    public String getIsbn() {
         return isbn;
     }
 
-    public void setIsbn(Long isbn) {
+    public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
 

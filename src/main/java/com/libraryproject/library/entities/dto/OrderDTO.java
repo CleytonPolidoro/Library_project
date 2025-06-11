@@ -1,17 +1,12 @@
 package com.libraryproject.library.entities.dto;
 
 import com.libraryproject.library.entities.Order;
-import com.libraryproject.library.entities.OrderItem;
-import com.libraryproject.library.entities.User;
 import com.libraryproject.library.entities.enums.OrderStatus;
-import com.libraryproject.library.entities.projections.OrderItemProjection;
-import com.libraryproject.library.entities.projections.OrderProjection;
 import jakarta.validation.constraints.NotEmpty;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class OrderDTO {
     private Long id;
