@@ -14,9 +14,11 @@ public class UserDTO {
         this.phone = phone;
     }
 
+    public UserDTO(){}
+
     public UserDTO(User entity) {
         id = entity.getId();
-        name = entity.getUsername();
+        name = entity.getName();
         email = entity.getEmail();
         phone = entity.getPhone();
     }

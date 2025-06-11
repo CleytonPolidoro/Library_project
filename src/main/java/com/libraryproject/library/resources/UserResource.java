@@ -1,9 +1,8 @@
 package com.libraryproject.library.resources;
 
-import com.libraryproject.library.entities.Role;
-import com.libraryproject.library.entities.User;
-import com.libraryproject.library.entities.dto.CreateUserDTO;
 import com.libraryproject.library.entities.dto.UserDTO;
+import com.libraryproject.library.entities.dto.UserInsertDTO;
+import com.libraryproject.library.entities.dto.UserUpdateDTO;
 import com.libraryproject.library.services.RoleService;
 import com.libraryproject.library.services.UserService;
 import jakarta.validation.Valid;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.HashSet;
-import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -57,27 +54,13 @@ public class UserResource {
 
 
     @PostMapping()
-    public ResponseEntity<UserDTO> save(@RequestBody @Valid CreateUserDTO dto){
+    public ResponseEntity<UserDTO> save(@RequestBody @Valid UserInsertDTO dto){
+
+        UserDTO newDto = service.insert(dto);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
 
 
-        User user = new User();
-
-        Role basicRole = roleService.findByAuthority(Role.Values.CLIENT.name());
-        Set<Role> roles = new HashSet<>();
-        user.setName(dto.name());
-        user.setEmail(dto.email());
-        user.setPhone(dto.phone());
-        roles.add(basicRole);
-        user.addRoles(roles);
-        user.setPassword(bCrypt.encode(dto.password()));
-
-        UserDTO userDto = new UserDTO(user);
-
-        service.insert(user);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(userDto.getId()).toUri();
-
-
-        return ResponseEntity.created(uri).body(userDto);
+        return ResponseEntity.created(uri).body(newDto);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -89,9 +72,9 @@ public class UserResource {
 
     @PutMapping(value = "/{id}")
     @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UserDTO dto){
-        dto = service.update(id, dto);
-        return ResponseEntity.ok().body(dto);
+    public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UserUpdateDTO dto){
+        UserDTO newDto = service.update(id, dto);
+        return ResponseEntity.ok().body(newDto);
     }
 
 }

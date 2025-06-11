@@ -2,6 +2,8 @@ package com.libraryproject.library.services;
 
 import com.libraryproject.library.entities.User;
 import com.libraryproject.library.entities.dto.UserDTO;
+import com.libraryproject.library.entities.dto.UserInsertDTO;
+import com.libraryproject.library.entities.dto.UserUpdateDTO;
 import com.libraryproject.library.repositories.UserRepository;
 import com.libraryproject.library.services.exceptions.DatabaseException;
 import com.libraryproject.library.services.exceptions.ResourceNotFoundException;
@@ -45,16 +47,11 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO insert(User user){
-
-        boolean emailExist = repository.findAll().stream().anyMatch(u -> u.getEmail().equalsIgnoreCase(user.getEmail()));;
-
-        if(emailExist){
-            throw new DatabaseException("Integrity violation. Email already registered.");
-        }
-
-        User result = repository.save(user);
-        return new UserDTO(result);
+    public UserDTO insert(UserInsertDTO dto){
+        User entity = new User();
+        copyDtoToEntity(dto, entity);
+        entity = repository.save(entity);
+        return new UserDTO(entity);
     }
     @Transactional(readOnly = true)
     public void deleteById(Long id){
@@ -69,7 +66,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserDTO update(Long id, UserDTO dto){
+    public UserDTO update(Long id, UserUpdateDTO dto){
         try {
             User entity = repository.getReferenceById(id);
             copyDtoToEntity(dto, entity);
@@ -100,7 +97,6 @@ public class UserService {
         entity.setName(dto.getName());
         entity.setEmail(dto.getEmail());
         entity.setPhone(dto.getPhone());
-        entity.setId(dto.getId());
 
     }
 }

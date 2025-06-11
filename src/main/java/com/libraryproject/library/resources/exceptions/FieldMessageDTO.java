@@ -1,4 +1,4 @@
-package com.libraryproject.library.entities.dto;
+package com.libraryproject.library.resources.exceptions;
 
 public class FieldMessageDTO {
     private String fieldName;

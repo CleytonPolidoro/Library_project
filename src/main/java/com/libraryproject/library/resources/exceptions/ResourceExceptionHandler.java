@@ -1,8 +1,5 @@
 package com.libraryproject.library.resources.exceptions;
 
-import com.libraryproject.library.entities.dto.FieldMessageDTO;
-import com.libraryproject.library.entities.dto.StandardErrorDTO;
-import com.libraryproject.library.entities.dto.ValidationErrorDTO;
 import com.libraryproject.library.services.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -13,7 +10,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.Instant;
-import java.time.format.DateTimeParseException;
 
 
 @ControllerAdvice
