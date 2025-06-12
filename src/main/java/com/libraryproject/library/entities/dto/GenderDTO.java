@@ -14,6 +14,9 @@ public class GenderDTO {
 
     List<BookMinDTO> book;
 
+    public GenderDTO() {
+    }
+
     public GenderDTO(Long id, String name, List<BookMinDTO> books) {
         this.id = id;
         this.name = name;
@@ -23,7 +26,6 @@ public class GenderDTO {
     public GenderDTO(Gender entity){
         id=entity.getId();
         name=entity.getName();
-        book=entity.getBook().stream().map(x -> new BookMinDTO(x)).toList();
     }
 
     public Long getId() {
@@ -37,4 +39,5 @@ public class GenderDTO {
     public List<BookMinDTO> getBook() {
         return book;
     }
+
 }

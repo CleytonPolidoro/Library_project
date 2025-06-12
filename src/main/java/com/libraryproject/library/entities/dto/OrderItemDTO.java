@@ -9,6 +9,8 @@ public class OrderItemDTO {
     private String author;
     private Double price;
 
+    public OrderItemDTO(){}
+
     public OrderItemDTO(Integer quantity, Long bookId, String author, Double price) {
         this.quantity = quantity;
         this.bookId = bookId;

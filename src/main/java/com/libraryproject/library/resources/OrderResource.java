@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/orders")
@@ -38,7 +39,7 @@ public class OrderResource {
         return ResponseEntity.ok().body(page);
     }
 
-    @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN', 'SCOPE_CLIENT')")
+    @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<OrderDTO> findById(@PathVariable Long id){
         OrderDTO order = service.findById(id);

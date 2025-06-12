@@ -1,4 +1,4 @@
-	package com.libraryproject.library.config.customGrant;
+package com.libraryproject.library.config.customgrant;
 
 import org.springframework.security.core.GrantedAuthority;
 

@@ -44,11 +44,10 @@ public class GenderService {
             throw new UnprocessableException("Gender already exists");
         }
 
-        Gender gender = new Gender();
-        copyDtoToEntity(dto, gender);
+        Gender gender = new Gender(dto);
 
-        Gender result = repository.save(gender);
-        return new GenderDTO(result);
+        gender = repository.save(gender);
+        return new GenderDTO(gender);
     }
 
     private void copyDtoToEntity(GenderDTO dto, Gender entity) {

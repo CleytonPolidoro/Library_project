@@ -28,6 +28,7 @@ public class BookDTO {
     @NotEmpty(message = "Deve ter no mínimo um gênero")
     private List<GenderDTO> genders = new ArrayList<>();
 
+    public BookDTO(){}
 
     public BookDTO(Long id, String title, String author, Integer pages, String isbn, Double price, String imgUrl, List<GenderDTO> genders) {
         this.id = id;

@@ -23,11 +23,11 @@ public class User implements UserDetails {
 
     @ManyToMany
     @JoinTable(
-            name = "tb_users_roles",
+            name = "tb_user_role",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "roles_id")
+            inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
 
     @OneToMany(mappedBy = "client")
@@ -132,8 +132,8 @@ public class User implements UserDetails {
         return false;
     }
 
-    public void addRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void addRole(Role role) {
+        roles.add(role);
     }
 
     @Override

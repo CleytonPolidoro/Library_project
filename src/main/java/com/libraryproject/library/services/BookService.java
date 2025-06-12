@@ -26,8 +26,8 @@ public class BookService {
     private BookRepository repository;
 
     @Transactional(readOnly = true)
-    public Page<BookMinDTO> findAll(Pageable pageable, String title){
-        Page<Book> result = repository.searchAll(pageable, title);
+    public Page<BookMinDTO> findAll(Pageable pageable, String title, String author){
+        Page<Book> result = repository.searchAll(pageable, title, author);
         return result.map(x -> new BookMinDTO(x));
     }
 
@@ -36,17 +36,6 @@ public class BookService {
         Book result = repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Resource not found. Id " + id));
         return new BookDTO(result);
     }
-
-    @Transactional(readOnly = true)
-    public Page<BookMinDTO> findByAuthor(Pageable pageable ,String author){
-
-            Page<Book> result = repository.searchByAuthor(pageable, author);
-            if(result.getContent().isEmpty()){
-                throw new ResourceNotFoundException("Resource not found with author " + author);
-            }
-            return result.map(x -> new BookMinDTO(x));
-    }
-
 
     @Transactional
     public BookDTO insert(BookDTO dto){

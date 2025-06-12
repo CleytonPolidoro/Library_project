@@ -46,4 +46,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 //        "WHERE orders.moment BETWEEN :minDate AND :maxDate")
     Page<OrderProjection>findOrdersBetweenDates(Instant minDate, Instant maxDate, Pageable pageable);
 
+
+    List<Order> findOrdersByClientId(Long id);
 }

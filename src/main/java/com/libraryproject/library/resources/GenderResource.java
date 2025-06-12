@@ -31,7 +31,6 @@ public class GenderResource {
 
 
     @GetMapping(value = "/{id}")
-    @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
     public ResponseEntity<GenderDTO> findById(@PathVariable Long id){
         GenderDTO gender = service.findById(id);
         return ResponseEntity.ok().body(gender);

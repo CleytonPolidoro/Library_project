@@ -1,13 +1,13 @@
-INSERT INTO tb_user (name, email, password, phone) VALUES ('admin', 'admin@admin.com', '$2a$10$wTEO.BK3y7A2BPvgcZJbveFAm258I4/1QJg9zX8/dikMUPC0/206a', '');
-INSERT INTO tb_user (name, email, password, phone) VALUES ('Maria Brown', 'maria@gmail.com', '$2a$10$/sWSLSCwgBYURMta1zhJRuPRLspPCGPBnybS080ixwoPRJ2PYHmcK', '988888888');
-INSERT INTO tb_user (name, email, password, phone) VALUES ('Alex Green','alex@gmail.com','$2a$10$kpcDH5zMKK1r9TMzStnZ7OxoGq0aZ4j9i3LWs.sYx5AifWugmG8S.','977777777');
+INSERT INTO tb_user (name, email, password, phone) VALUES ('admin', 'admin@gmail.com', '$2a$10$fQRZQ9h9ZwIyc5oRyaxE4.aNJkA2QzX8fWbRhZNbjn3q7sL/42iEC', '');
+INSERT INTO tb_user (name, email, password, phone) VALUES ('Maria Brown', 'maria@gmail.com', '$2a$10$fQRZQ9h9ZwIyc5oRyaxE4.aNJkA2QzX8fWbRhZNbjn3q7sL/42iEC', '988888888');
+INSERT INTO tb_user (name, email, password, phone) VALUES ('Alex Green','alex@gmail.com','$2a$10$fQRZQ9h9ZwIyc5oRyaxE4.aNJkA2QzX8fWbRhZNbjn3q7sL/42iEC','977777777');
 
-INSERT INTO roles (authority) VALUES ('SCOPE_ADMIN');
-INSERT INTO roles (authority) VALUES ('SCOPE_CLIENT');
+INSERT INTO tb_role (authority) VALUES ('SCOPE_ADMIN');
+INSERT INTO tb_role (authority) VALUES ('SCOPE_CLIENT');
 
-INSERT INTO tb_users_roles (roles_id, user_id) VALUES (1,1);
-INSERT INTO tb_users_roles (roles_id, user_id) VALUES (2,2);
-INSERT INTO tb_users_roles (roles_id, user_id) VALUES (2,3);
+INSERT INTO tb_user_role (role_id, user_id) VALUES (1,1);
+INSERT INTO tb_user_role (role_id, user_id) VALUES (2,2);
+INSERT INTO tb_user_role (role_id, user_id) VALUES (2,3);
 
 INSERT INTO orders (moment, status, client_id) VALUES ('2024-10-11T19:53:07Z', 2, 2);
 INSERT INTO orders (moment, status, client_id) VALUES ('2024-10-09T03:42:10Z', 1, 3);

@@ -12,8 +12,10 @@ import java.util.Optional;
 public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("SELECT obj FROM Book obj " +
-            "WHERE UPPER(obj.title) LIKE UPPER(CONCAT('%', :title, '%') ) ")
-    Page<Book>searchAll(Pageable pageable, String title);
+            "WHERE UPPER(obj.title) LIKE UPPER(CONCAT('%', :title, '%') ) " +
+            "AND UPPER(obj.author) LIKE UPPER(CONCAT('%', :author, '%') )"
+    )
+    Page<Book>searchAll(Pageable pageable, String title, String author);
 
     @Query("SELECT obj FROM Book obj " +
             "WHERE UPPER(obj.author) LIKE UPPER(CONCAT('%', :author, '%'))")

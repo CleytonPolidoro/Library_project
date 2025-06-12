@@ -1,27 +1,21 @@
 package com.libraryproject.library.services;
 
-import com.libraryproject.library.entities.Book;
-import com.libraryproject.library.entities.Order;
-import com.libraryproject.library.entities.OrderItem;
-import com.libraryproject.library.entities.User;
-import com.libraryproject.library.entities.dto.ClientDTO;
-import com.libraryproject.library.entities.dto.OrderDTO;
-import com.libraryproject.library.entities.dto.OrderItemDTO;
-import com.libraryproject.library.entities.dto.OrderMinDTO;
+import com.libraryproject.library.entities.*;
+import com.libraryproject.library.entities.dto.*;
 import com.libraryproject.library.entities.enums.OrderStatus;
 import com.libraryproject.library.entities.projections.OrderItemProjection;
 import com.libraryproject.library.entities.projections.OrderProjection;
 import com.libraryproject.library.repositories.BookRepository;
 import com.libraryproject.library.repositories.OrderItemRepository;
 import com.libraryproject.library.repositories.OrderRepository;
-import com.libraryproject.library.services.exceptions.DatabaseException;
-import com.libraryproject.library.services.exceptions.DateTimeException;
-import com.libraryproject.library.services.exceptions.ResourceNotFoundException;
-import com.libraryproject.library.services.exceptions.UnprocessableException;
+import com.libraryproject.library.services.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +25,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -80,17 +75,15 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public OrderDTO findById(Long id){
+
         List<Integer> list = new ArrayList<>();
         list.add(id.intValue());
 
         Order order = repository.findById(id).orElseThrow(
                 ()-> new ResourceNotFoundException("Resource not found. Id "+id));
 
-        List<OrderItemProjection> result = repository.findOrdersAndItems(list);
+        //List<OrderItemProjection> result = repository.findOrdersAndItems(list);
         OrderDTO dto = new OrderDTO(order);
-//        dto.getItems().addAll(result.stream().map(x -> new OrderItemDTO(x)).toList());
-
-//        authService.validateSelfOrAdmin(order.getClientId());
 
         return dto;
     }
@@ -116,6 +109,7 @@ public class OrderService {
     }
 
 
+
     private Page<OrderMinDTO> convertProjectionToDto(Page<OrderProjection> page, List<OrderItemProjection> list){
         List<OrderMinDTO> page3 = new ArrayList<>();
 
@@ -138,4 +132,5 @@ public class OrderService {
         }
         return page4;
     }
+
 }
