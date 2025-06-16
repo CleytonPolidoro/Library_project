@@ -11,11 +11,8 @@ import com.libraryproject.library.repositories.OrderRepository;
 import com.libraryproject.library.services.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +22,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -59,7 +55,7 @@ public class OrderService {
               Page<OrderProjection> page = repository.findOrdersBetweenDates(min, max, pageable);
               List<OrderItemProjection> list = repository.findOrdersAndItems(page.map(x -> x.getId().intValue()).toList());
 
-              return convertProjectionToDto(page, list);
+              return addItemsInOrders(page, list);
           } catch (DateTimeParseException e){
               throw new DateTimeException("Use DD-MM-YYYY' format");
           }
@@ -70,7 +66,7 @@ public class OrderService {
     public Page<OrderMinDTO> findAll(Pageable pageable){
         Page<OrderProjection> page = repository.searchAll(pageable);
         List<OrderItemProjection> list = repository.findOrdersAndItems(page.map(x -> x.getId().intValue()).toList());
-        return convertProjectionToDto(page, list);
+        return addItemsInOrders(page, list);
     }
 
     @Transactional(readOnly = true)
@@ -110,7 +106,7 @@ public class OrderService {
 
 
 
-    private Page<OrderMinDTO> convertProjectionToDto(Page<OrderProjection> page, List<OrderItemProjection> list){
+    private Page<OrderMinDTO> addItemsInOrders(Page<OrderProjection> page, List<OrderItemProjection> list){
         List<OrderMinDTO> page3 = new ArrayList<>();
 
         for(OrderProjection order : page){
@@ -133,4 +129,15 @@ public class OrderService {
         return page4;
     }
 
+    public List<OrderMinDTO> myOrders() {
+       UserDTO me = userService.getMe();
+       Long myClientId = me.getId();
+
+       PageRequest page = PageRequest.of(0, 10);
+       Page<OrderProjection> ordersProj = repository.findByClientId(myClientId, page);
+       List<OrderItemProjection> orderItemProj = repository.findOrdersAndItems(ordersProj.stream().map(x -> x.getId().intValue()).toList());
+
+
+       return addItemsInOrders(ordersProj, orderItemProj).stream().toList();
+    }
 }

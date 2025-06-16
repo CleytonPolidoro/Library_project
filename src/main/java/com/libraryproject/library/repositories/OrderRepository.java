@@ -1,8 +1,6 @@
 package com.libraryproject.library.repositories;
 
 import com.libraryproject.library.entities.Order;
-import com.libraryproject.library.entities.OrderItem;
-import com.libraryproject.library.entities.dto.OrderDTO;
 import com.libraryproject.library.entities.projections.OrderItemProjection;
 import com.libraryproject.library.entities.projections.OrderProjection;
 import org.springframework.data.domain.Page;
@@ -21,7 +19,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "FROM orders")
     Page<OrderProjection> searchAll(Pageable pageable);
 
-    @Query(nativeQuery = true, value = "SELECT order_item.order_id, order_item.price, order_item.quantity, Books.id, Books.author " +
+    @Query(nativeQuery = true, value = "SELECT order_item.order_id, order_item.price, order_item.quantity, order_item.book_id, Books.author, Books.title " +
             "FROM order_item " +
             "INNER JOIN Books ON Books.id = order_item.book_id " +
             "WHERE order_item.order_id IN :list")
@@ -46,6 +44,12 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 //        "WHERE orders.moment BETWEEN :minDate AND :maxDate")
     Page<OrderProjection>findOrdersBetweenDates(Instant minDate, Instant maxDate, Pageable pageable);
 
+    @Query(nativeQuery = true, value =
+        "SELECT  O.id, O.moment, O.status, O.Client_id " +
+        "FROM Orders O " +
+        "WHERE O.client_id = :id"
+    )
+    Page<OrderProjection> findByClientId(Long id, Pageable page);
 
-    List<Order> findOrdersByClientId(Long id);
+
 }

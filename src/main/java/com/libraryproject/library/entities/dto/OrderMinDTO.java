@@ -32,6 +32,7 @@ public class OrderMinDTO {
         status = OrderStatus.valueOf(proj.getStatus());
     }
 
+
     public Long getId() {
         return id;
     }

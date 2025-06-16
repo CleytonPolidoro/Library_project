@@ -24,6 +24,14 @@ public class OrderResource {
     @Autowired
     private OrderService service;
 
+    @GetMapping(value = "/me")
+    @PreAuthorize("hasAuthority('SCOPE_CLIENT')")
+    public ResponseEntity<List<OrderMinDTO>> myOrders(){
+        List<OrderMinDTO> orders = service.myOrders();
+
+        return ResponseEntity.ok().body(orders);
+    }
+
     @GetMapping
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<Page<OrderMinDTO>> findAll(Pageable pageable) {
