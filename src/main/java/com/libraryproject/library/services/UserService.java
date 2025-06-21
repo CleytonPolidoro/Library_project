@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private PasswordEncoder encoder;
 
     @Transactional(readOnly = true)
     public Page<UserDTO> findAll(Pageable pageable){
@@ -55,21 +59,22 @@ public class UserService implements UserDetailsService {
     public UserDTO insert(UserInsertDTO dto){
         User entity = new User();
         copyDtoToEntity(dto, entity);
+        entity.setPassword(encoder.encode(dto.getPassword()));
         entity = repository.save(entity);
         return new UserDTO(entity);
     }
     @Transactional(readOnly = true)
     public void deleteById(Long id){
+        if(!repository.existsById(id)){
+            throw new ResourceNotFoundException("Resource not found. Id "+ id);
+        }
         try {
-            if(!repository.existsById(id)){
-                throw new ResourceNotFoundException("Resource not found. Id "+ id);
-            }
             repository.deleteById(id);
-        } catch(DataIntegrityViolationException e){
+        }
+        catch(DataIntegrityViolationException e){
             throw new DatabaseException(e.getMessage());
         }
     }
-
     @Transactional(readOnly = true)
     public UserDTO update(Long id, UserUpdateDTO dto){
         try {
@@ -102,7 +107,6 @@ public class UserService implements UserDetailsService {
         entity.setName(dto.getName());
         entity.setEmail(dto.getEmail());
         entity.setPhone(dto.getPhone());
-
     }
 
     @Override
