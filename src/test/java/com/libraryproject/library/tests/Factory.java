@@ -47,9 +47,22 @@ public class Factory {
         return new Book(null, "Diário estoico", "Ryan Holiday", 496, "978_6555605556L", 64.90, "", createGender());
     }
 
-    private static Gender createGender() {
-        return new Gender(1l, "Desenvolvimento pessoal");
+    public static Gender createGender() {
+        return new Gender(null, "Desenvolvimento pessoal");
     }
+
+    public static Gender createSaveGender() {
+        return new Gender(null, "action");
+    }
+
+    public static GenderDTO createSaveGenderDto() {
+        return new GenderDTO(createSaveGender());
+    }
+
+    public static GenderDTO createGenderDTO(){
+        return new GenderDTO(createGender());
+    }
+
 
     public static BookDTO createBookDto(){
         return new BookDTO(createBook());
@@ -57,7 +70,7 @@ public class Factory {
 
     public static BookDTO createInvalidBookDto(){
         List<GenderDTO> genders = new ArrayList<>();
-        genders.add(new GenderDTO(createGender()));
+        genders.add(createGenderDTO());
         return new BookDTO(null, "Di", " ", null, "978_6555605556L", 64.90, "", genders);
 
     }
