@@ -30,9 +30,6 @@ public class OrderService {
     private OrderRepository repository;
 
     @Autowired
-    private AuthService authService;
-
-    @Autowired
     private OrderItemRepository itemRepository;
 
     @Autowired

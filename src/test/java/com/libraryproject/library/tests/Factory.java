@@ -1,11 +1,14 @@
 package com.libraryproject.library.tests;
 
 
+import com.libraryproject.library.entities.Book;
+import com.libraryproject.library.entities.Gender;
 import com.libraryproject.library.entities.User;
-import com.libraryproject.library.entities.dto.UserDTO;
-import com.libraryproject.library.entities.dto.UserInsertDTO;
-import com.libraryproject.library.entities.dto.UserUpdateDTO;
+import com.libraryproject.library.entities.dto.*;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Factory {
 
@@ -38,5 +41,33 @@ public class Factory {
 
     public static UserDetailsDto createUserDetailsDto(){
         return new UserDetailsDto("cleyton@gmail.com", "123456", 1L, "SCOPE_CLIENT");
+    }
+
+    public static Book createBook(){
+        return new Book(null, "Diário estoico", "Ryan Holiday", 496, "978_6555605556L", 64.90, "", createGender());
+    }
+
+    private static Gender createGender() {
+        return new Gender(1l, "Desenvolvimento pessoal");
+    }
+
+    public static BookDTO createBookDto(){
+        return new BookDTO(createBook());
+    }
+
+    public static BookDTO createInvalidBookDto(){
+        List<GenderDTO> genders = new ArrayList<>();
+        genders.add(new GenderDTO(createGender()));
+        return new BookDTO(null, "Di", " ", null, "978_6555605556L", 64.90, "", genders);
+
+    }
+
+    public static Book createExistingBook() {
+        Gender genders = createGender();
+        return new Book(null,"Box Duna: Primeira Trilogia", "Frank Herbert", 1480, "978_6586064414L", 299.90, "", genders);
+    }
+
+    public static BookDTO createExistingBookDto() {
+        return new BookDTO(createExistingBook());
     }
 }
