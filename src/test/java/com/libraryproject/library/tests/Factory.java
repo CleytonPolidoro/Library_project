@@ -107,4 +107,8 @@ public class Factory {
     public static OrderDTO createOrderDTO(){
         return new OrderDTO(createOrder());
     }
+
+    public static Role createRole(){
+        return new Role(Role.Values.ADMIN.name());
+    }
 }
