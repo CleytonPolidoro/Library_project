@@ -1,7 +1,5 @@
 package com.libraryproject.library.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.libraryproject.library.entities.enums.OrderStatus;
 import jakarta.persistence.*;
 
@@ -93,8 +91,8 @@ public class Order implements Serializable {
     public Set<OrderItem> getItems() {
         return items;
     }
-    public void setItems(Set<OrderItem> items) {
-        items.addAll(items);
+    public void setItems(Set<OrderItem> orderItems) {
+        items.addAll(orderItems);
     }
 
     public List<Book> getBooks(){

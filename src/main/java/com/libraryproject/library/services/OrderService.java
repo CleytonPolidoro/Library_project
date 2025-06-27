@@ -54,7 +54,7 @@ public class OrderService {
 
               return addItemsInOrders(page, list);
           } catch (DateTimeParseException e){
-              throw new DateTimeException("Use DD-MM-YYYY' format");
+              throw new DateTimeException("Use 'DD-MM-YYYY' format");
           }
     }
 

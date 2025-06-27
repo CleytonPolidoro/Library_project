@@ -1,14 +1,16 @@
 package com.libraryproject.library.tests;
 
 
-import com.libraryproject.library.entities.Book;
-import com.libraryproject.library.entities.Gender;
-import com.libraryproject.library.entities.User;
+import com.libraryproject.library.entities.*;
 import com.libraryproject.library.entities.dto.*;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.libraryproject.library.entities.enums.OrderStatus;
+import com.libraryproject.library.entities.projections.OrderItemProjection;
+import com.libraryproject.library.entities.projections.OrderProjection;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class Factory {
 
@@ -44,11 +46,11 @@ public class Factory {
     }
 
     public static Book createBook(){
-        return new Book(null, "Diário estoico", "Ryan Holiday", 496, "978_6555605556L", 64.90, "", createGender());
+        return new Book(1L, "Diário estoico", "Ryan Holiday", 496, "978_6555605556L", 64.90, "", createGender());
     }
 
     public static Gender createGender() {
-        return new Gender(null, "Desenvolvimento pessoal");
+        return new Gender(1L, "Desenvolvimento pessoal");
     }
 
     public static Gender createSaveGender() {
@@ -82,5 +84,27 @@ public class Factory {
 
     public static BookDTO createExistingBookDto() {
         return new BookDTO(createExistingBook());
+    }
+
+    public static Order createOrder(){
+        return new Order(1L, Instant.parse("2024-10-06T00:00:00Z"), createUser(), OrderStatus.WAITING_PAYMENT);
+    }
+
+    public static OrderProjection createOrderProjection(){
+        return new OrderDto(createOrder());
+    }
+
+    public static OrderItem createOrderItem(){
+        return new OrderItem(
+                createOrder(), createBook(), 2, 24.90
+        );
+    }
+
+    public static OrderItemProjection createOrderItemDto(){
+        return new OrderItemDto(createOrderItem());
+    }
+
+    public static OrderDTO createOrderDTO(){
+        return new OrderDTO(createOrder());
     }
 }
