@@ -70,6 +70,10 @@ public class Factory {
         return new BookDTO(createBook());
     }
 
+    public static BookMinDTO createBookMinDTO(){
+        return new BookMinDTO(createBook());
+    }
+
     public static BookDTO createInvalidBookDto(){
         List<GenderDTO> genders = new ArrayList<>();
         genders.add(createGenderDTO());
@@ -79,7 +83,7 @@ public class Factory {
 
     public static Book createExistingBook() {
         Gender genders = createGender();
-        return new Book(null,"Box Duna: Primeira Trilogia", "Frank Herbert", 1480, "978_6586064414L", 299.90, "", genders);
+        return new Book(1L,"Box Duna: Primeira Trilogia", "Frank Herbert", 1480, "978_6586064414L", 299.90, "", genders);
     }
 
     public static BookDTO createExistingBookDto() {
