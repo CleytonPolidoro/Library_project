@@ -122,6 +122,6 @@ public class Factory {
     }
 
     public static Role createRole(){
-        return new Role(Role.Values.ADMIN.name());
+        return new Role(1L,Role.Values.ADMIN.name());
     }
 }
