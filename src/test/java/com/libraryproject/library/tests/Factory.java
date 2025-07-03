@@ -18,6 +18,7 @@ public class Factory {
         return new User(null,"Cleyton", "cleyton.polidoro@gmail.com", "123456", "2255555555");
     }
 
+
     public static UserDTO createUserDTO(){
         return new UserDTO(createUser());
     }

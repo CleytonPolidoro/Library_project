@@ -67,7 +67,7 @@ public class UserResource {
     @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
     public ResponseEntity<Void> deleteById(@PathVariable Long id){
         service.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping(value = "/{id}")
