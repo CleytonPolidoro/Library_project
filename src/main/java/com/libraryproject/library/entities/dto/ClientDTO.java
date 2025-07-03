@@ -6,9 +6,7 @@ public class ClientDTO {
     private Long id;
     private String name;
 
-    public ClientDTO(Long id, String name) {
-        this.id = id;
-        this.name = name;
+    public ClientDTO() {
     }
 
     public ClientDTO(User entity) {

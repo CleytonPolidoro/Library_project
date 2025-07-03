@@ -109,7 +109,15 @@ public class Factory {
     }
 
     public static OrderDTO createOrderDTO(){
-        return new OrderDTO(createOrder());
+        OrderDTO dto = new OrderDTO(createOrder());
+        dto.getItems().add(new OrderItemDTO(createOrderItem()));
+        return dto;
+    }
+
+    public static OrderMinDTO createOrderMinDTO(){
+        OrderMinDTO orderMin = new OrderMinDTO(createOrderProjection());
+        orderMin.getItems().add(new OrderItemDTO(createOrderItemDto()));
+        return orderMin;
     }
 
     public static Role createRole(){
