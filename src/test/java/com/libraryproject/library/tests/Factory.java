@@ -50,6 +50,14 @@ public class Factory {
         return new Book(1L, "Diário estoico", "Ryan Holiday", 496, "978_6555605556L", 64.90, "", createGender());
     }
 
+    public static Book createBookInsert(){
+        return new Book(null, "Noite de reis", "William Shakespeare", 144, "9788525425201", 64.90, "", new Gender(1L, ""));
+    }
+
+    public static BookDTO createBookDtoInsert() {
+        return new BookDTO(createBookInsert());
+    }
+
     public static Gender createGender() {
         return new Gender(1L, "Desenvolvimento pessoal");
     }
