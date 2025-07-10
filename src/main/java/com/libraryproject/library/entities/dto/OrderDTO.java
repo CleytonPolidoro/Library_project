@@ -77,4 +77,7 @@ public class OrderDTO {
         return items;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
