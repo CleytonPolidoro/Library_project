@@ -10,13 +10,11 @@ import com.libraryproject.library.services.UserService;
 import com.libraryproject.library.services.exceptions.DatabaseException;
 import com.libraryproject.library.services.exceptions.ResourceNotFoundException;
 import com.libraryproject.library.tests.Factory;
-import org.hibernate.annotations.NotFound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -31,7 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 
 @WebMvcTest(value = UserResource.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class})
-public class UserResourceTest {
+public class UserResourceTests {
 
     @Autowired
     private MockMvc mockMvc;

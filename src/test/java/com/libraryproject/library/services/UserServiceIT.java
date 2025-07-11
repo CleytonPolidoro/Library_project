@@ -52,9 +52,6 @@ public class UserServiceIT {
         dependentId = 3L;
         user = Factory.createUser();
         nonExistingEmail = "jamida@gmail.com";
-
-//        Mockito.when(repository.findByEmail(any())).thenReturn(Optional.of(user));
-//        Mockito.doThrow(ResourceNotFoundException.class).when(repository).findByEmail(eq(nonExistingEmail));
     }
 
     @Test

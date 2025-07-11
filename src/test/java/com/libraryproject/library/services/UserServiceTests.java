@@ -135,7 +135,7 @@ public class UserServiceTests {
 
     @Test
     public void deleteShouldThrowDatabaseExceptionWhenDependentId(){
-        Assertions.assertThrows(DatabaseException.class, () -> {
+        Assertions.assertThrows(DataIntegrityViolationException.class, () -> {
             service.deleteById(dependentId);
         });
     }
