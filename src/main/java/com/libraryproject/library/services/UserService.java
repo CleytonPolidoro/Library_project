@@ -68,12 +68,7 @@ public class UserService implements UserDetailsService {
         if(!repository.existsById(id)){
             throw new ResourceNotFoundException("Resource not found. Id "+ id);
         }
-        try {
-            repository.deleteById(id);
-        }
-        catch(DataIntegrityViolationException e){
-            throw new DatabaseException(e.getMessage());
-        }
+        repository.deleteById(id);
     }
     @Transactional(readOnly = true)
     public UserDTO update(Long id, UserUpdateDTO dto){
