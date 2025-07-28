@@ -13,6 +13,7 @@ import org.springframework.web.servlet.HandlerMapping;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 public class UserUpdateValidator implements ConstraintValidator<UserUpdateValid, UserUpdateDTO> {
@@ -36,8 +37,8 @@ public class UserUpdateValidator implements ConstraintValidator<UserUpdateValid,
 		
 		List<FieldMessageDTO> list = new ArrayList<>();
 		
-		User user = repository.findByEmail(dto.getEmail()).get();
-		if (user != null && userId != user.getId()) {
+		Optional<User> user = repository.findByEmail(dto.getEmail());
+		if (user.isPresent() && userId != user.get().getId()) {
 			list.add(new FieldMessageDTO("email", "Email já existe"));
 		}
 
